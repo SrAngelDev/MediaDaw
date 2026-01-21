@@ -1,4 +1,4 @@
-# 🛒 MediaDaw - Tienda Online de Electrónica
+# 🛒 MediaDaw - Tienda Online de Producción Musical y Tecnología DAW
 
 <div align="center">
 
@@ -21,21 +21,19 @@
 
 ## 📋 Descripción
 
-**MediaDaw** es una aplicación web de comercio electrónico especializada en productos tecnológicos y electrónicos. A diferencia de un marketplace tradicional, MediaDaw gestiona un **inventario centralizado** donde la tienda es la propietaria de todos los productos.
+**MediaDaw** es una aplicación web de comercio electrónico especializada en productos de producción musical, audio profesional y tecnología DAW (Digital Audio Workstation). A diferencia de un marketplace tradicional, MediaDaw gestiona un **inventario centralizado** donde la tienda es la propietaria de todos los productos, con control estricto de stock en tiempo real.
 
-### 🎯 Diferencias Clave con WalaDaw
+### 💾 Arquitectura de Datos
 
-| Característica | WalaDaw | MediaDaw |
-|----------------|---------|----------|
-| Modelo de Negocio | Marketplace con múltiples vendedores | Tienda única con inventario centralizado |
-| Propiedad de Productos | Cada producto pertenece a un vendedor | Todos los productos pertenecen a la tienda |
-| Control de Stock | ❌ No implementado | ✅ **Gestión crítica** - Stock en tiempo real |
-| Roles de Usuario | Vendedor / Comprador | Administrador / Cliente |
-| Gestión de Inventario | Descentralizada | Centralizada (solo ADMIN) |
+**MediaDaw utiliza exclusivamente:**
+- ✅ **Spring Data JPA** con Hibernate (ORM)
+- ✅ **Bases de datos relacionales** (H2, MySQL, MariaDB)
+- ✅ **Relaciones bidireccionales** (@OneToOne, @OneToMany, @ManyToOne)
+- ✅ **Transacciones ACID** para garantizar consistencia
 
 ---
 
-## ✨ Características
+## ✨ Características Implementadas
 
 ### 👥 Sistema de Usuarios
 - ✅ Registro e inicio de sesión seguro
@@ -43,6 +41,7 @@
 - ✅ Roles diferenciados (USER/ADMIN)
 - ✅ Encriptación de contraseñas con BCrypt
 - ✅ Gestión de perfiles
+- ✅ Borrado lógico de usuarios (mantiene auditoría)
 
 ### 📦 Gestión de Productos
 - ✅ CRUD completo de productos (solo ADMIN)
@@ -51,26 +50,45 @@
 - ✅ Búsqueda y filtrado avanzado
 - ✅ Borrado lógico de productos
 - ✅ Alertas de stock bajo
+- ✅ Vistas responsive con tarjetas de producto
 
-### 🛒 Carrito de Compras
+### 🛒 Carrito de Compras (Arquitectura Robusta)
+- ✅ **Arquitectura User → Carrito → LineaCarrito** (similar a Venta-LineaVenta)
+- ✅ Lazy creation: carrito creado automáticamente al primer uso
 - ✅ Añadir/eliminar productos
-- ✅ Modificar cantidades
-- ✅ Validación de stock disponible
+- ✅ Modificar cantidades con validación de stock
+- ✅ **Validación estricta de stock antes de cada operación** ⚠️
 - ✅ Cálculo automático de totales
+- ✅ Relaciones bidireccionales correctamente sincronizadas
+- ✅ Transaccionalidad completa con rollback
 
-### 📋 Sistema de Pedidos
+### 📋 Sistema de Pedidos (Ventas)
 - ✅ Creación de pedidos desde el carrito
 - ✅ **Reducción automática de stock** al confirmar compra
-- ✅ Precio congelado en el momento de compra
-- ✅ Estados de pedido (Pendiente, Enviado, Entregado)
+- ✅ Precio congelado en el momento de compra (evita cambios retrospectivos)
+- ✅ Estados de pedido (PENDIENTE, ENVIADO, ENTREGADO, CANCELADO)
 - ✅ Historial de compras por usuario
 - ✅ Panel de gestión de pedidos (ADMIN)
+- ✅ Restauración de stock al cancelar pedidos
+
+### 🎨 Sistema de Vistas (Pebble Templates)
+- ✅ Layout base modular con header y footer
+- ✅ Componentes reutilizables (productCard, alert)
+- ✅ Vista de homepage con productos destacados
+- ✅ Vista de listado de productos con filtros
+- ✅ Vista de detalle de producto completo
+- ✅ GlobalControllerAdvice (variables automáticas: currentUser, cartItemCount)
+- ✅ Sistema de mensajes flash
+- ✅ Diseño responsive con Bootstrap 5
+- ✅ Estilos de marca MediaDaw (rojo #CC0000, amarillo #FFCC00)
 
 ### 🔒 Seguridad
 - ✅ Rutas protegidas por roles
-- ✅ Protección CSRF
-- ✅ Sesiones seguras
+- ✅ Protección CSRF en todos los formularios
+- ✅ Sesiones seguras con HttpOnly cookies
 - ✅ Transacciones atómicas con rollback
+- ✅ CustomUserDetailsService para autenticación
+- ✅ Manejo centralizado de excepciones (GlobalExceptionHandler)
 
 ---
 
@@ -82,31 +100,103 @@
 ┌─────────────────────────────────────┐
 │         PRESENTATION LAYER          │
 │     (Controllers + Pebble Views)    │
+│   - HomeController                  │
+│   - ProductController               │
+│   - AdminController                 │
+│   + GlobalControllerAdvice          │
 └─────────────────────────────────────┘
                   ▼
 ┌─────────────────────────────────────┐
 │          BUSINESS LAYER             │
 │           (Services)                │
+│   - UserService                     │
+│   - ProductosService                  │
+│   - CarritoService    ⚠️            │
+│   - VentaService   ⚠️            │
 └─────────────────────────────────────┘
                   ▼
 ┌─────────────────────────────────────┐
 │         PERSISTENCE LAYER           │
 │   (Repositories + JPA Entities)     │
+│   - UserRepository                  │
+│   - ProductosRepository             │
+│   - CarritoRepository               │
+│   - LineaCarritoRepository          │
+│   - VentaRepository                 │
+│   - LineaVentaRepository            │
 └─────────────────────────────────────┘
                   ▼
 ┌─────────────────────────────────────┐
 │           DATABASE                  │
-│       (H2 / PostgreSQL)             │
+│     (H2 / MySQL / MariaDB)          │
+│   + JPA/Hibernate (ORM)             │
+│   + DDL auto-generated              │
 └─────────────────────────────────────┘
 ```
 
-### Entidades Principales
+### Diagrama de Entidades (Modelo de Dominio)
 
-- **User**: Usuarios con roles (USER/ADMIN)
-- **Product**: Productos con control de stock
-- **CartItem**: Items en el carrito de compras
-- **Purchase**: Pedidos realizados
-- **OrderLine**: Líneas de pedido con precio congelado
+```
+┌─────────────┐
+│    User     │
+│─────────────│
+│ id          │
+│ nombre      │
+│ email       │◄──────────┐
+│ password    │           │ 1:1
+│ role        │           │
+└─────────────┘           │
+      │ 1:N               │
+      │                   │
+      ▼                   │
+┌─────────────┐    ┌──────┴──────┐
+│    Venta    │    │   Carrito   │
+│─────────────│    │─────────────│
+│ id          │    │ id          │
+│ fechaCompra │    │ user        │
+│ total       │    │ updatedAt   │
+│ estado      │    └─────────────┘
+│ user        │           │ 1:N
+└─────────────┘           │
+      │ 1:N               ▼
+      │            ┌──────────────┐
+      │            │ LineaCarrito │
+      │            │──────────────│
+      │            │ id           │
+      │            │ carrito      │
+      │            │ productos    │
+      │            │ cantidad     │
+      ▼            └──────────────┘
+┌─────────────┐           │ N:1
+│ LineaVenta  │           │
+│─────────────│           │
+│ id          │           │
+│ venta       │           │
+│ productos   │◄──────────┘
+│ cantidad    │           
+│ precioVenta │◄──────────────────┐
+└─────────────┘                   │
+                                  │ N:1
+                           ┌──────┴──────┐
+                           │  Productos  │
+                           │─────────────│
+                           │ id          │
+                           │ nombre      │
+                           │ precio      │
+                           │ stock       │⚠️
+                           │ category    │
+                           │ deleted     │
+                           └─────────────┘
+```
+
+### Relaciones Clave
+
+1. **User → Carrito** (1:1): Un usuario tiene un carrito activo
+2. **Carrito → LineaCarrito** (1:N): Un carrito contiene muchas líneas
+3. **LineaCarrito → Productos** (N:1): Cada línea referencia un producto
+4. **User → Venta** (1:N): Un usuario puede tener múltiples pedidos
+5. **Venta → LineaVenta** (1:N): Un pedido tiene múltiples líneas
+6. **LineaVenta → Productos** (N:1): Cada línea referencia un producto
 
 ---
 
@@ -167,69 +257,84 @@ Password: cliente123
 ```
 MediaDaw/
 ├── src/main/java/srangeldev/mediadaw/
-│   ├── models/                    # Entidades JPA (8)
-│   │   ├── User.java
-│   │   ├── Product.java
-│   │   ├── CartItem.java
-│   │   ├── Purchase.java
-│   │   ├── OrderLine.java
-│   │   └── [Enums...]
-│   ├── repositories/              # Repositorios (5)
+│   ├── models/                        # Entidades JPA (9)
+│   │   ├── User.java                  # Usuario con roles
+│   │   ├── Productos.java             # Productos con stock
+│   │   ├── Carrito.java               # Carrito de compras
+│   │   ├── LineaCarrito.java          # Líneas del carrito
+│   │   ├── Venta.java                 # Pedidos finalizados
+│   │   ├── LineaVenta.java            # Líneas de pedido
+│   │   ├── Role.java                  # Enum roles
+│   │   ├── Categoria.java             # Enum categorías
+│   │   └── EstadoPedido.java          # Enum estados pedido
+│   │
+│   ├── repositories/                  # Repositorios JPA (6)
 │   │   ├── UserRepository.java
-│   │   ├── ProductRepository.java
-│   │   └── [...]
-│   ├── services/                  # Lógica de negocio (4)
+│   │   ├── ProductosRepository.java
+│   │   ├── CarritoRepository.java
+│   │   ├── LineaCarritoRepository.java
+│   │   ├── VentaRepository.java
+│   │   └── LineaVentaRepository.java
+│   │
+│   ├── services/                      # Lógica de negocio (5)
 │   │   ├── UserService.java
 │   │   ├── ProductService.java
-│   │   ├── CartService.java
-│   │   └── PurchaseService.java  ⚠️ Gestión crítica de stock
-│   ├── controllers/               # Controladores MVC (3)
+│   │   ├── CarritoService.java        # ⚠️ Gestión del carrito
+│   │   ├── PurchaseService.java       # ⚠️ Gestión crítica de stock
+│   │   └── CartService.java           # (alias)
+│   │
+│   ├── controllers/                   # Controladores MVC (3+)
 │   │   ├── HomeController.java
 │   │   ├── ProductController.java
 │   │   └── AdminController.java
-│   └── config/                    # Configuración (3)
-│       ├── SecurityConfig.java
-│       ├── CustomUserDetailsService.java
-│       └── DataLoader.java
+│   │   # Pendientes: CartController, AuthController
+│   │
+│   ├── security/                      # Configuración de seguridad
+│   │   └── CustomUserDetailsService.java
+│   │
+│   ├── config/                        # Configuración Spring
+│   │   ├── SecurityConfig.java
+│   │   ├── GlobalControllerAdvice.java
+│   │   ├── GlobalExceptionHandler.java
+│   │   └── DataLoader.java
+│   │
+│   └── exceptions/                    # Excepciones personalizadas
+│       ├── MediaDawException.java
+│       ├── UserNotFoundException.java
+│       ├── ProductNotFoundException.java
+│       ├── InsufficientStockException.java
+│       ├── EmptyCartException.java
+│       └── PurchaseNotFoundException.java
+│
 ├── src/main/resources/
-│   ├── application.properties
-│   └── templates/                 # Vistas Pebble (pendiente)
-├── MODEL_DOCUMENTATION.md         # Documentación del modelo
-├── SETUP_SUMMARY.md              # Resumen de implementación
-├── MODEL_DIAGRAM.txt             # Diagrama visual
-└── RESUMEN_EJECUTIVO.md          # Resumen ejecutivo
-```
-
----
-
-## 💡 Lógica Crítica: Proceso de Compra
-
-El corazón de MediaDaw es el método `PurchaseService.createPurchaseFromCart()`:
-
-```java
-@Transactional // Todo o nada - Rollback automático
-public Purchase createPurchaseFromCart(Long userId) {
-    // 1. Validar stock de TODOS los productos
-    // 2. Crear pedido (estado: PENDIENTE)
-    // 3. Crear líneas con precio congelado
-    // 4. REDUCIR STOCK de cada producto ⚠️
-    // 5. Calcular total
-    // 6. Guardar pedido
-    // 7. Limpiar carrito
-    // Si algo falla → ROLLBACK completo
-}
-```
-
-### ⚠️ Control de Stock
-
-```java
-// En Product.java
-public void reduceStock(int cantidad) {
-    if (!hasStock(cantidad)) {
-        throw new IllegalStateException("Stock insuficiente");
-    }
-    this.stock -= cantidad;
-}
+│   ├── application.properties         # Configuración de la app
+│   ├── static/
+│   │   ├── css/
+│   │   │   └── mediadaw.css          # Estilos personalizados
+│   │   └── images/
+│   │       ├── logo.png
+│   │       └── productos/
+│   │
+│   └── templates/                     # Vistas Pebble
+│       ├── layouts/
+│       │   └── base.peb              # Layout base
+│       ├── fragments/
+│       │   ├── header.peb            # Header reutilizable
+│       │   ├── footer.peb            # Footer reutilizable
+│       │   └── messages.peb          # Mensajes flash
+│       ├── components/
+│       │   ├── productCard.peb       # Tarjeta de producto
+│       │   └── alert.peb             # Componente alerta
+│       ├── productos/
+│       │   ├── list.peb              # Listado de productos
+│       │   └── detalleProducto.peb   # Detalle completo
+│       ├── index.peb                  # Homepage
+│       └── error.peb                  # Página de error
+│
+│
+├── build.gradle.kts                   # Configuración Gradle
+├── settings.gradle.kts
+└── README.md                          # Este archivo
 ```
 
 ---
@@ -245,22 +350,17 @@ public void reduceStock(int cantidad) {
 
 ### Base de Datos
 - **H2** (Desarrollo - en memoria)
-- **PostgreSQL** (Producción - recomendado)
+- **MySQL / MariaDB** (Producción)
+- **JPA/Hibernate** como ORM
+- **DDL auto-generado** desde entidades
 
-### Plantillas
+### Frontend
 - **Pebble Templates** (Motor de plantillas)
+- **Bootstrap 5** (Framework CSS)
+- **Bootstrap Icons**
 
 ### Build Tool
-- **Gradle 9.2.1**
-
----
-
-## 📚 Documentación
-
-- **[MODEL_DOCUMENTATION.md](MODEL_DOCUMENTATION.md)** - Documentación completa del modelo de dominio
-- **[SETUP_SUMMARY.md](SETUP_SUMMARY.md)** - Resumen de la implementación
-- **[RESUMEN_EJECUTIVO.md](RESUMEN_EJECUTIVO.md)** - Resumen ejecutivo del proyecto
-- **[MODEL_DIAGRAM.txt](MODEL_DIAGRAM.txt)** - Diagrama visual ASCII del modelo
+- **Gradle 9.2.1** (con Kotlin DSL)
 
 ---
 
@@ -289,37 +389,40 @@ public void reduceStock(int cantidad) {
 
 ---
 
-## 🔧 Configuración
-
-### Base de Datos (H2 - Desarrollo)
-```properties
-spring.datasource.url=jdbc:h2:mem:mediadaw
-spring.h2.console.enabled=true
-spring.h2.console.path=/h2-console
-```
-
-### Base de Datos (PostgreSQL - Producción)
-```properties
-spring.datasource.url=jdbc:postgresql://localhost:5432/mediadaw
-spring.datasource.username=tu_usuario
-spring.datasource.password=tu_password
-spring.jpa.hibernate.ddl-auto=update
-```
-
----
-
 ## 📝 Próximos Pasos (Roadmap)
 
-- [ ] Crear vistas Pebble para la interfaz de usuario
-- [ ] Implementar controladores de carrito y compra
-- [ ] Añadir validaciones de formularios
+### 🚧 En Desarrollo
+- [ ] **CartController** - Endpoints para gestión del carrito
+  - POST /carrito/add - Añadir producto
+  - GET /carrito - Ver carrito
+  - PUT /carrito/item/{id} - Actualizar cantidad
+  - DELETE /carrito/item/{id} - Eliminar línea
+  - POST /carrito/checkout - Finalizar compra
+  
+- [ ] **AuthController** - Sistema de autenticación
+  - GET /login - Formulario de login
+  - POST /login - Procesar login
+  - GET /registro - Formulario de registro
+  - POST /registro - Procesar registro
+  - GET /logout - Cerrar sesión
+
+- [ ] **Vistas del Carrito** (Pebble)
+  - carrito/view.peb - Vista del carrito
+  - carrito/checkout.peb - Proceso de compra
+
+- [ ] **Vistas de Autenticación** (Pebble)
+  - auth/login.peb - Formulario login
+  - auth/registro.peb - Formulario registro
+
+### 🎯 Mejoras Futuras
 - [ ] Sistema de favoritos
-- [ ] Notificaciones por email
+- [ ] Notificaciones por email (confirmación de pedidos)
 - [ ] Paginación de productos
-- [ ] API REST para aplicaciones móviles
-- [ ] Integración con pasarela de pago (Stripe/PayPal)
-- [ ] Panel de estadísticas avanzado
+- [ ] Filtros avanzados (precio, disponibilidad)
 - [ ] Sistema de reseñas de productos
+- [ ] Panel de estadísticas avanzado para admin
+- [ ] Integración con pasarela de pago (Stripe)
+- [ ] Historial de precios de productos
 
 ---
 
@@ -356,17 +459,9 @@ Este proyecto tiene fines educativos y está desarrollado como parte del módulo
 ## 👨‍💻 Autor
 
 **Proyecto MediaDaw**  
-Módulo: Desarrollo de Aplicaciones Web (2DAW)  
-Año: 2026
-
----
-
-## 📞 Soporte
-
-Para cualquier duda o consulta:
-- 📧 Email: [tu-email@ejemplo.com]
-- 📚 Documentación: Ver archivos `.md` en el proyecto
-- 🐛 Issues: [GitHub Issues](https://github.com/tu-usuario/MediaDaw/issues)
+Desarrollado por: Ángel Sánchez Gasanz  
+Módulo: Desarrollo Web en Entorno Servidor (2DAW)  
+Año: 2025-2026
 
 ---
 
