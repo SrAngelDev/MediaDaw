@@ -1,4 +1,4 @@
-# 🛒 MediaDaw - Tienda Online de Producción Musical y Tecnología DAW
+# 🛒 MediaDaw - Tienda Online
 
 <div align="center">
 
