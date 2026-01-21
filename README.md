@@ -15,7 +15,7 @@
 
 ## 📋 Descripción
 
-**MediaDaw** es una aplicación web de comercio electrónico especializada en productos de producción musical, audio profesional y tecnología DAW (Digital Audio Workstation). A diferencia de un marketplace tradicional, MediaDaw gestiona un **inventario centralizado** donde la tienda es la propietaria de todos los productos, con control estricto de stock en tiempo real.
+**MediaDaw** es una aplicación web de comercio electrónico especializada en todo tipo de productos de diferentes categorias. A diferencia de un marketplace tradicional, MediaDaw gestiona un **inventario centralizado** donde la tienda es la propietaria de todos los productos, con control estricto de stock en tiempo real.
 
 ### 💾 Arquitectura de Datos
 
