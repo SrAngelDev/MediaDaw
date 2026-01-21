@@ -1,0 +1,73 @@
+{#
+  Componente de Alerta
+
+  Uso en plantillas Pebble:
+  {% include 'components/alert.peb' %}
+
+  Variables esperadas (vienen de RedirectAttributes):
+  - errorMessage: Mensaje de error/éxito/info
+  - errorType: danger, warning, success, info (por defecto: danger)
+  - errorCode: Código técnico del error (opcional)
+#}
+
+{% if errorMessage or successMessage or infoMessage or warningMessage %}
+<div class="container my-3">
+    {% if errorMessage %}
+    <div class="alert alert-{{ errorType | default('danger') }} alert-dismissible fade show" role="alert">
+        <div class="d-flex align-items-center">
+            <i class="bi bi-exclamation-triangle-fill fs-4 me-3"></i>
+            <div class="flex-grow-1">
+                <strong>Error:</strong> {{ errorMessage }}
+                {% if errorCode %}
+                    <small class="d-block mt-1 text-muted">Código: {{ errorCode }}</small>
+                {% endif %}
+                {% if availableStock is defined %}
+                    <div class="mt-2">
+                        <span class="badge bg-warning text-dark">
+                            <i class="bi bi-box-seam"></i> Stock disponible: {{ availableStock }} unidades
+                        </span>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
+
+    {% if successMessage %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <div class="d-flex align-items-center">
+            <i class="bi bi-check-circle-fill fs-4 me-3"></i>
+            <div class="flex-grow-1">
+                <strong>¡Éxito!</strong> {{ successMessage }}
+            </div>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
+
+    {% if infoMessage %}
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        <div class="d-flex align-items-center">
+            <i class="bi bi-info-circle-fill fs-4 me-3"></i>
+            <div class="flex-grow-1">
+                <strong>Información:</strong> {{ infoMessage }}
+            </div>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
+
+    {% if warningMessage %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <div class="d-flex align-items-center">
+            <i class="bi bi-exclamation-circle-fill fs-4 me-3"></i>
+            <div class="flex-grow-1">
+                <strong>Atención:</strong> {{ warningMessage }}
+            </div>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
+</div>
+{% endif %}

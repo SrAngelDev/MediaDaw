@@ -1,0 +1,147 @@
+{#
+  Fragment: Header / Navbar de MediaDaw
+
+  Variables esperadas (desde GlobalControllerAdvice):
+  - currentUser: Usuario autenticado (puede ser null)
+  - cartItemCount: Número de productos en el carrito
+#}
+
+<header class="bg-brand-red sticky-top py-3 shadow-sm">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-between">
+
+            {# Logo #}
+            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-decoration-none me-3">
+                <img src="/images/logo.png" alt="MediaDaw Logo" class="logo-img">
+            </a>
+
+            {# Buscador #}
+            <div class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3 flex-fill px-md-5">
+                <form action="/productos" method="get" class="input-group">
+                    <input type="search"
+                           name="search"
+                           class="form-control"
+                           placeholder="Buscar interfaz, plugins, cables..."
+                           aria-label="Search"
+                           value="{{ search | default('') }}">
+                    <button class="btn btn-search" type="submit">BUSCAR</button>
+                </form>
+            </div>
+
+            {# Enlaces de usuario #}
+            <div class="text-end text-white fw-bold d-flex gap-3 align-items-center">
+                {% if currentUser %}
+                    {# Usuario autenticado #}
+                    <div class="dropdown">
+                        <a href="#"
+                           class="text-white text-decoration-none dropdown-toggle"
+                           data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                            <i class="bi bi-person-fill"></i>
+                            {{ currentUser.nombre }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <a class="dropdown-item" href="/perfil">
+                                    <i class="bi bi-person-badge"></i> Mi Perfil
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="/pedidos">
+                                    <i class="bi bi-bag-check"></i> Mis Pedidos
+                                </a>
+                            </li>
+
+                            {# Opción de Admin (solo visible para ADMIN) #}
+                            {% if currentUser.role.name() == 'ADMIN' %}
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item text-danger" href="/admin">
+                                    <i class="bi bi-gear-fill"></i> Panel Admin
+                                </a>
+                            </li>
+                            {% endif %}
+
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form action="/logout" method="post" class="d-inline">
+                                    <input type="hidden" name="_csrf" value="{{ _csrf.token }}">
+                                    <button type="submit" class="dropdown-item text-danger">
+                                        <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                {% else %}
+                    {# Usuario no autenticado #}
+                    <a href="/login" class="text-white text-decoration-none">
+                        <i class="bi bi-person-fill"></i> Iniciar Sesión
+                    </a>
+                    <a href="/registro" class="text-white text-decoration-none">
+                        <i class="bi bi-person-plus-fill"></i> Registro
+                    </a>
+                {% endif %}
+
+                {# Carrito de compras #}
+                <a href="/carrito" class="text-white text-decoration-none position-relative">
+                    <i class="bi bi-cart-fill fs-5"></i> Carrito
+                    {% if cartItemCount > 0 %}
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark">
+                        {{ cartItemCount }}
+                        <span class="visually-hidden">items en el carrito</span>
+                    </span>
+                    {% endif %}
+                </a>
+            </div>
+        </div>
+    </div>
+</header>
+
+{# Navbar de Categorías (solo visible en pantallas medianas y grandes) #}
+<nav class="bg-white border-bottom py-2 d-none d-md-block">
+    <div class="container">
+        <ul class="nav nav-pills justify-content-center justify-content-lg-start gap-3">
+            <li class="nav-item">
+                <a href="/productos" class="nav-link text-dark fw-bold text-uppercase p-0 px-2">
+                    Todos
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/productos?category=AUDIO" class="nav-link text-dark fw-bold text-uppercase p-0 px-2">
+                    Audio
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/productos?category=IMAGEN" class="nav-link text-dark fw-bold text-uppercase p-0 px-2">
+                    Imagen
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/productos?category=SMARTPHONES" class="nav-link text-dark fw-bold text-uppercase p-0 px-2">
+                    Smartphones
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/productos?category=LAPTOPS" class="nav-link text-dark fw-bold text-uppercase p-0 px-2">
+                    Laptops
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/productos?category=GAMING" class="nav-link text-dark fw-bold text-uppercase p-0 px-2">
+                    Gaming
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/productos?category=INSTRUMENTOS" class="nav-link text-dark fw-bold text-uppercase p-0 px-2">
+                    Instrumentos
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/ofertas" class="nav-link text-danger fw-bold text-uppercase p-0 px-2">
+                    <i class="bi bi-lightning-fill"></i> Ofertas Flash
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>

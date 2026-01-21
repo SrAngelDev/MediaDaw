@@ -1,0 +1,467 @@
+/**
+ * MediaDaw - Estilos personalizados
+ * Inspirado en MediaMarkt
+ */
+
+:root {
+    /* Colores de marca MediaMarkt */
+    --mm-red: #DF0000;
+    --mm-dark-red: #b30000;
+    --mm-yellow: #FFCC00;
+    --mm-black: #191919;
+    --mm-gray: #F4F4F4;
+    --mm-gray-dark: #666666;
+
+    /* Colores de estado */
+    --success: #28a745;
+    --danger: #dc3545;
+    --warning: #ffc107;
+    --info: #17a2b8;
+}
+
+/* ========================================
+   ESTILOS GLOBALES
+   ======================================== */
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: var(--mm-gray);
+    color: var(--mm-black);
+}
+
+/* ========================================
+   HEADER Y NAVEGACIÓN
+   ======================================== */
+
+.bg-brand-red {
+    background-color: var(--mm-red) !important;
+}
+
+.navbar-brand img {
+    max-height: 50px;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.navbar-dark .navbar-nav .nav-link:hover {
+    color: var(--mm-yellow);
+}
+
+/* Badge del carrito */
+.cart-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: var(--mm-yellow);
+    color: var(--mm-black);
+    font-size: 0.75rem;
+    font-weight: bold;
+    padding: 0.25rem 0.5rem;
+    border-radius: 50%;
+    min-width: 20px;
+    text-align: center;
+}
+
+/* ========================================
+   BUSCADOR
+   ======================================== */
+
+.search-form {
+    max-width: 600px;
+}
+
+.search-form .form-control {
+    border-radius: 25px 0 0 25px;
+    border-right: none;
+}
+
+.search-form .btn {
+    border-radius: 0 25px 25px 0;
+    background-color: var(--mm-yellow);
+    color: var(--mm-black);
+    font-weight: bold;
+    border: 1px solid var(--mm-yellow);
+}
+
+.search-form .btn:hover {
+    background-color: #e6b800;
+    border-color: #e6b800;
+}
+
+/* ========================================
+   TARJETAS DE PRODUCTO
+   ======================================== */
+
+.product-card {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.product-image-wrapper {
+    position: relative;
+    padding-top: 75%; /* Aspect ratio 4:3 */
+    overflow: hidden;
+    background-color: #f8f9fa;
+}
+
+.product-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 1rem;
+}
+
+.product-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+    font-weight: bold;
+    border-radius: 5px;
+    text-transform: uppercase;
+    z-index: 10;
+}
+
+.product-card-body {
+    padding: 1.25rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-category {
+    font-size: 0.8rem;
+    color: var(--mm-gray-dark);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+
+.product-title {
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--mm-black);
+    margin-bottom: 0.5rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-height: 2.5rem;
+}
+
+.product-price {
+    font-size: 1.75rem;
+    font-weight: bold;
+    color: var(--mm-red);
+    margin-bottom: 0.5rem;
+}
+
+.product-stock {
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+}
+
+.product-stock i {
+    margin-right: 0.25rem;
+}
+
+/* ========================================
+   BOTONES
+   ======================================== */
+
+.btn-brand {
+    background-color: var(--mm-red);
+    color: white;
+    font-weight: bold;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.btn-brand:hover {
+    background-color: var(--mm-dark-red);
+    color: white;
+}
+
+.btn-brand:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.btn-add-cart {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 0.9rem;
+}
+
+/* ========================================
+   ALERTAS Y MENSAJES
+   ======================================== */
+
+.alert {
+    border-radius: 8px;
+    border: none;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.alert-warning {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.alert-info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+/* ========================================
+   FILTROS Y CATEGORÍAS
+   ======================================== */
+
+.filter-section {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+.filter-section h5 {
+    color: var(--mm-red);
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.category-badge {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    margin: 0.25rem;
+    background-color: var(--mm-gray);
+    color: var(--mm-black);
+    border-radius: 20px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.category-badge:hover,
+.category-badge.active {
+    background-color: var(--mm-red);
+    color: white;
+}
+
+/* ========================================
+   FOOTER
+   ======================================== */
+
+footer {
+    background-color: var(--mm-black);
+    color: white;
+    padding: 2rem 0;
+    margin-top: 4rem;
+}
+
+footer a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+footer a:hover {
+    color: var(--mm-yellow);
+}
+
+/* ========================================
+   UTILIDADES
+   ======================================== */
+
+.text-brand-red {
+    color: var(--mm-red) !important;
+}
+
+.text-brand-yellow {
+    color: var(--mm-yellow) !important;
+}
+
+.bg-brand-yellow {
+    background-color: var(--mm-yellow) !important;
+}
+
+/* Estado de stock */
+.text-success {
+    color: var(--success) !important;
+}
+
+.text-warning {
+    color: var(--warning) !important;
+}
+
+.text-danger {
+    color: var(--danger) !important;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 768px) {
+    .product-price {
+        font-size: 1.5rem;
+    }
+
+    .search-form {
+        margin-top: 1rem;
+    }
+
+    .navbar-brand img {
+        max-height: 40px;
+    }
+}
+
+@media (max-width: 576px) {
+    .product-card-body {
+        padding: 1rem;
+    }
+
+    .product-title {
+        font-size: 0.9rem;
+    }
+
+    .product-price {
+        font-size: 1.25rem;
+    }
+}
+
+/* ========================================
+   ANIMACIONES
+   ======================================== */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* ========================================
+   CARRITO
+   ======================================== */
+
+.cart-item {
+    background: white;
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cart-summary {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 20px;
+}
+
+.cart-total {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--mm-red);
+}
+
+/* ========================================
+   FORMULARIOS
+   ======================================== */
+
+.form-control:focus {
+    border-color: var(--mm-red);
+    box-shadow: 0 0 0 0.2rem rgba(223, 0, 0, 0.25);
+}
+
+.form-label {
+    font-weight: 600;
+    color: var(--mm-black);
+}
+
+/* ========================================
+   ADMIN PANEL
+   ======================================== */
+
+.admin-sidebar {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.admin-nav-link {
+    display: block;
+    padding: 0.75rem 1rem;
+    color: var(--mm-black);
+    text-decoration: none;
+    border-radius: 5px;
+    margin-bottom: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.admin-nav-link:hover,
+.admin-nav-link.active {
+    background-color: var(--mm-red);
+    color: white;
+}
+
+.stats-card {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.stats-number {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--mm-red);
+}
+
+.stats-label {
+    color: var(--mm-gray-dark);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}

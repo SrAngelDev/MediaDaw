@@ -1,0 +1,94 @@
+{#
+  Macro: productCard
+  Renderiza una tarjeta de producto reutilizable
+
+  Parámetros:
+  - product: Objeto producto con todos sus datos
+  - showBadge: (opcional) Boolean para mostrar badge
+  - badgeText: (opcional) Texto del badge (ej: "TOP VENTAS", "OFERTA")
+  - badgeColor: (opcional) Color del badge (ej: "#FFCC00")
+#}
+
+{% macro productCard(product, showBadge, badgeText, badgeColor) %}
+<div class="card h-100 product-card border-0 shadow-sm">
+    {# Badge opcional (TOP VENTAS, OFERTA, NOVEDAD, etc.) #}
+    {% if showBadge %}
+    <div class="position-absolute top-0 start-0 m-2" style="z-index: 10;">
+        <span class="badge" style="background-color: {{ badgeColor | default('#FFCC00') }}; color: #000; font-weight: bold;">
+            {{ badgeText | default('NOVEDAD') }}
+        </span>
+    </div>
+    {% endif %}
+
+    {# Imagen del producto #}
+    <div class="product-image-wrapper">
+        {% if product.imagen %}
+        <img src="{{ product.imagen }}"
+             class="product-image"
+             alt="{{ product.nombre }}">
+        {% else %}
+        <div class="d-flex align-items-center justify-content-center h-100 bg-light">
+            <span class="text-muted">Sin imagen</span>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="card-body product-card-body">
+        {# Categoría #}
+        <p class="product-category mb-2">{{ product.category }}</p>
+
+        {# Título del producto #}
+        <h5 class="product-title">
+            <a href="/productos/{{ product.id }}" class="text-dark text-decoration-none">
+                {{ product.nombre }}
+            </a>
+        </h5>
+
+        {# Descripción corta #}
+        <p class="card-text small text-muted mb-3">
+            {% if product.descripcion | length > 80 %}
+                {{ product.descripcion | slice(0, 80) }}...
+            {% else %}
+                {{ product.descripcion }}
+            {% endif %}
+        </p>
+
+        {# Precio y stock #}
+        <div class="mt-auto">
+            <div class="product-price mb-2">
+                {{ product.precio }} €
+            </div>
+
+            {# Estado de stock #}
+            <p class="product-stock mb-3">
+                {% if product.stock > 10 %}
+                    <i class="bi bi-check-circle text-success"></i>
+                    <span class="text-success">En stock</span>
+                {% elseif product.stock > 0 %}
+                    <i class="bi bi-exclamation-triangle text-warning"></i>
+                    <span class="text-warning">Últimas {{ product.stock }} unidades</span>
+                {% else %}
+                    <i class="bi bi-x-circle text-danger"></i>
+                    <span class="text-danger">Agotado</span>
+                {% endif %}
+            </p>
+
+            {# Botón de añadir al carrito #}
+            {% if product.stock > 0 %}
+            <form action="/carrito/add" method="post" class="add-to-cart-form">
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+                <input type="hidden" name="productId" value="{{ product.id }}">
+                <input type="hidden" name="quantity" value="1">
+                <button type="submit" class="btn btn-brand btn-add-cart">
+                    <i class="bi bi-cart-plus"></i> Añadir al carrito
+                </button>
+            </form>
+            {% else %}
+            <button class="btn btn-secondary btn-add-cart" disabled>
+                <i class="bi bi-x-circle"></i> Agotado
+            </button>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endmacro %}

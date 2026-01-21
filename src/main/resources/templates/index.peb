@@ -1,0 +1,152 @@
+{#
+  Vista: Página principal de MediaDaw
+
+  Extiende de: layouts/base.peb
+  Usa macro: components/productCard.peb
+
+  Variables recibidas del controlador:
+  - products: Lista de productos destacados
+  - categories: Array de categorías de productos
+
+  Variables automáticas (GlobalControllerAdvice):
+  - currentUser: Usuario autenticado
+  - cartItemCount: Contador del carrito
+  - isAdmin: Boolean de rol admin
+#}
+
+{% extends "layouts/base" %}
+
+{# Importar la macro productCard desde components #}
+{% import "components/productCard" %}
+
+{% block title %}Inicio - MediaDaw | Tu tienda de producción musical{% endblock %}
+
+{% block content %}
+
+{# Hero Section con mensaje promocional #}
+<section class="hero-section text-center p-5 mb-5">
+    <div class="container">
+        <h1 class="hero-title display-4 fw-bold">¡DÍA SIN IVA!</h1>
+        <a href="/productos" class="btn btn-brand btn-lg mt-3 px-5">
+            <i class="bi bi-shop"></i> Ver Todos los Productos
+        </a>
+    </div>
+</section>
+
+{# Sección de Top Ventas #}
+<div class="container mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="section-title h2 mb-0">Top Ventas de la Semana</h2>
+        <a href="/productos" class="text-decoration-none fw-bold">
+            Ver todos <i class="bi bi-arrow-right"></i>
+        </a>
+    </div>
+
+    {% if products is empty %}
+        {# Mensaje si no hay productos #}
+        <div class="alert alert-info text-center py-5">
+            <i class="bi bi-info-circle fs-1 d-block mb-3"></i>
+            <h4>No hay productos disponibles en este momento</h4>
+            <p class="mb-0">Vuelve pronto para ver nuestras novedades</p>
+        </div>
+    {% else %}
+        {# Grid de productos usando la macro productCard #}
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+            {% for product in products %}
+                {#
+                  Usar la macro productCard con badges personalizados
+                  según las características del producto
+                #}
+                {% if loop.index == 1 %}
+                    {# Primer producto: TOP VENTAS con badge amarillo MediaMarkt #}
+                    {{ productCard(product, true, 'TOP VENTAS', '#FFCC00') }}
+                {% elseif product.stock <= 5 and product.stock > 0 %}
+                    {# Producto con stock bajo: OFERTA con badge amarillo #}
+                    {{ productCard(product, true, 'OFERTA', '#FFCC00') }}
+                {% else %}
+                    {# Producto normal sin badge #}
+                    {{ productCard(product) }}
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+
+{# Sección de Categorías Destacadas #}
+<div class="container mb-5">
+    <h2 class="section-title h2 mb-4">Explora por Categorías</h2>
+
+    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-3">
+        {% for category in categories %}
+        <div class="col">
+            <a href="/productos?category={{ category.name() }}"
+               class="card text-center text-decoration-none category-card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column justify-content-center py-4">
+                    {# Iconos según categoría #}
+                    <i class="bi
+                        {% if category.name() == 'AUDIO' %}bi-headphones
+                        {% elseif category.name() == 'IMAGEN' %}bi-camera
+                        {% elseif category.name() == 'SMARTPHONES' %}bi-phone
+                        {% elseif category.name() == 'LAPTOPS' %}bi-laptop
+                        {% elseif category.name() == 'GAMING' %}bi-controller
+                        {% elseif category.name() == 'INSTRUMENTOS' %}bi-music-note-beamed
+                        {% endif %}
+                        fs-1 mb-3 text-danger"></i>
+                    <h5 class="card-title text-dark mb-0">{{ category.name() }}</h5>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{# Sección de Beneficios (Trust Signals) #}
+<div class="container mb-5">
+    <div class="row g-4 text-center">
+        <div class="col-md-3">
+            <div class="p-4">
+                <i class="bi bi-truck fs-1 text-danger mb-3"></i>
+                <h5 class="fw-bold">Envío Rápido</h5>
+                <p class="text-muted small mb-0">En 24-48h en península</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="p-4">
+                <i class="bi bi-shield-check fs-1 text-danger mb-3"></i>
+                <h5 class="fw-bold">Compra Segura</h5>
+                <p class="text-muted small mb-0">Pago 100% protegido</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="p-4">
+                <i class="bi bi-arrow-return-left fs-1 text-danger mb-3"></i>
+                <h5 class="fw-bold">Devoluciones</h5>
+                <p class="text-muted small mb-0">30 días sin preguntas</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="p-4">
+                <i class="bi bi-headset fs-1 text-danger mb-3"></i>
+                <h5 class="fw-bold">Soporte 24/7</h5>
+                <p class="text-muted small mb-0">Atención personalizada</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Script para añadir productos al carrito con AJAX (opcional)
+    document.querySelectorAll('.add-to-cart-form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            // Aquí puedes interceptar el submit y hacer una petición AJAX
+            // para añadir al carrito sin recargar la página
+
+            console.log('Añadiendo producto al carrito...');
+            // Por ahora deja que el formulario se envíe normalmente
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,103 @@
+{#
+  Fragment: Mensajes de alerta (Flash Attributes)
+#}
+
+{% if errorMessage or successMessage or infoMessage or warningMessage %}
+<div class="container my-3">
+
+    {# Mensaje de Error #}
+    {% if errorMessage %}
+    <div class="alert alert-{{ errorType | default('danger') }} alert-dismissible fade show shadow-sm" role="alert">
+        <div class="d-flex align-items-start">
+            <div class="me-3 fs-3">
+                {% if errorType == 'danger' %}
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                {% elseif errorType == 'warning' %}
+                    <i class="bi bi-exclamation-circle-fill"></i>
+                {% else %}
+                    <i class="bi bi-info-circle-fill"></i>
+                {% endif %}
+            </div>
+            <div class="flex-grow-1">
+                <h5 class="alert-heading mb-2">
+                    {% if errorType == 'danger' %}
+                        Error
+                    {% elseif errorType == 'warning' %}
+                        Atención
+                    {% else %}
+                        Información
+                    {% endif %}
+                </h5>
+                <p class="mb-0">{{ errorMessage }}</p>
+
+                {# Código de error (opcional) #}
+                {% if errorCode %}
+                    <small class="d-block mt-2 text-muted">
+                        <i class="bi bi-code-slash"></i> Código: {{ errorCode }}
+                    </small>
+                {% endif %}
+
+                {# Stock disponible (para excepciones de stock) #}
+                {% if availableStock is defined %}
+                    <div class="mt-2">
+                        <span class="badge bg-warning text-dark">
+                            <i class="bi bi-box-seam"></i> Stock disponible: {{ availableStock }} unidades
+                        </span>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
+
+    {# Mensaje de Éxito #}
+    {% if successMessage %}
+    <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+        <div class="d-flex align-items-start">
+            <div class="me-3 fs-3">
+                <i class="bi bi-check-circle-fill"></i>
+            </div>
+            <div class="flex-grow-1">
+                <h5 class="alert-heading mb-2">¡Éxito!</h5>
+                <p class="mb-0">{{ successMessage }}</p>
+            </div>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
+
+    {# Mensaje de Información #}
+    {% if infoMessage %}
+    <div class="alert alert-info alert-dismissible fade show shadow-sm" role="alert">
+        <div class="d-flex align-items-start">
+            <div class="me-3 fs-3">
+                <i class="bi bi-info-circle-fill"></i>
+            </div>
+            <div class="flex-grow-1">
+                <h5 class="alert-heading mb-2">Información</h5>
+                <p class="mb-0">{{ infoMessage }}</p>
+            </div>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
+
+    {# Mensaje de Advertencia #}
+    {% if warningMessage %}
+    <div class="alert alert-warning alert-dismissible fade show shadow-sm" role="alert">
+        <div class="d-flex align-items-start">
+            <div class="me-3 fs-3">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+            </div>
+            <div class="flex-grow-1">
+                <h5 class="alert-heading mb-2">Atención</h5>
+                <p class="mb-0">{{ warningMessage }}</p>
+            </div>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
+
+</div>
+{% endif %}

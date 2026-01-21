@@ -1,0 +1,127 @@
+{#
+  Vista: Lista de productos con filtros
+  Muestra todos los productos disponibles con opciones de búsqueda y filtrado por categoría
+#}
+
+{% extends "layouts/base" %}
+
+{# Importar la macro productCard #}
+{% import "components/productCard" %}
+
+{% block title %}Productos - MediaDaw{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+
+    {# Breadcrumb #}
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Inicio</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Productos</li>
+        </ol>
+    </nav>
+
+    {# Título de la página #}
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="fw-bold text-brand-red">
+                {% if selectedCategory is defined and selectedCategory is not null %}
+                    {{ selectedCategory }}
+                {% elseif searchQuery %}
+                    Resultados para "{{ searchQuery }}"
+                {% else %}
+                    Todos los productos
+                {% endif %}
+            </h1>
+            <p class="text-muted">
+                {{ products | length }} producto{% if products | length != 1 %}s{% endif %} encontrado{% if products | length != 1 %}s{% endif %}
+            </p>
+        </div>
+    </div>
+
+    {# Filtros y búsqueda #}
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title text-brand-red fw-bold mb-3">
+                        <i class="bi bi-funnel"></i> Filtrar por categoría
+                    </h5>
+
+                    {# Botón "Todas" #}
+                    <a href="/productos"
+                       class="d-block mb-2 btn btn-sm {% if selectedCategory is not defined or selectedCategory is null %}btn-brand{% else %}btn-outline-secondary{% endif %}">
+                        <i class="bi bi-grid-3x3-gap"></i> Todas las categorías
+                    </a>
+
+                    {# Lista de categorías #}
+                    {% for category in categories %}
+                    <a href="/productos?category={{ category.name() }}"
+                       class="d-block mb-2 btn btn-sm {% if selectedCategory is defined and selectedCategory is not null and selectedCategory == category.name() %}btn-brand{% else %}btn-outline-secondary{% endif %}">
+                        <i class="bi bi-tag"></i> {{ category.name() }}
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            {# Barra de búsqueda #}
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body">
+                    <form action="/productos" method="get" class="d-flex">
+                        <input type="text"
+                               name="search"
+                               class="form-control me-2"
+                               placeholder="Buscar productos..."
+                               value="{{ searchQuery | default('') }}">
+                        <button type="submit" class="btn btn-brand">
+                            <i class="bi bi-search"></i> Buscar
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            {# Grid de productos #}
+            {% if products is not empty %}
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                {% for product in products %}
+                <div class="col">
+                    {% if product.stock <= 5 and product.stock > 0 %}
+                        {# Producto con stock bajo: OFERTA #}
+                        {{ productCard(product, true, 'OFERTA', '#FFCC00') }}
+                    {% else %}
+                        {# Producto normal #}
+                        {{ productCard(product) }}
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            {# Mensaje cuando no hay productos #}
+            <div class="alert alert-info d-flex align-items-center" role="alert">
+                <i class="bi bi-info-circle-fill me-3 fs-3"></i>
+                <div>
+                    <h5 class="alert-heading mb-1">No se encontraron productos</h5>
+                    <p class="mb-0">
+                        {% if searchQuery %}
+                            No hay productos que coincidan con tu búsqueda "{{ searchQuery }}".
+                        {% elseif selectedCategory %}
+                            No hay productos disponibles en la categoría {{ selectedCategory }}.
+                        {% else %}
+                            No hay productos disponibles en este momento.
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <a href="/productos" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i> Ver todos los productos
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

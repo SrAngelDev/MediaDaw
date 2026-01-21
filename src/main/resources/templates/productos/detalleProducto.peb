@@ -1,0 +1,155 @@
+{#
+  Vista: Detalle de producto
+  Muestra toda la información de un producto específico
+#}
+
+{% extends "layouts/base" %}
+
+{% block title %}{{ product.nombre }} - MediaDaw{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+
+    {# Breadcrumb #}
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Inicio</a></li>
+            <li class="breadcrumb-item"><a href="/productos">Productos</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ product.nombre }}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        {# Imagen del producto #}
+        <div class="col-md-6 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <img src="{{ product.imagen | default('/images/producto-placeholder.png') }}"
+                         class="img-fluid rounded"
+                         alt="{{ product.nombre }}"
+                         style="width: 100%; height: auto; object-fit: contain; max-height: 500px;">
+                </div>
+            </div>
+        </div>
+
+        {# Información del producto #}
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+
+                    {# Categoría #}
+                    <div class="mb-3">
+                        <span class="badge" style="background-color: var(--mm-yellow); color: var(--mm-black);">
+                            {{ product.category }}
+                        </span>
+                    </div>
+
+                    {# Título #}
+                    <h1 class="h2 fw-bold mb-3">{{ product.nombre }}</h1>
+
+                    {# Descripción #}
+                    <p class="text-muted mb-4">{{ product.descripcion }}</p>
+
+                    {# Precio #}
+                    <div class="mb-4">
+                        <div class="d-flex align-items-baseline">
+                            <span class="h1 fw-bold text-brand-red me-2">
+                                {{ product.precio }} €
+                            </span>
+                        </div>
+                        <p class="small text-muted mb-0">IVA incluido</p>
+                    </div>
+
+                    {# Stock #}
+                    <div class="mb-4">
+                        <h5 class="fw-bold mb-2">Disponibilidad:</h5>
+                        {% if product.stock > 10 %}
+                            <span class="badge bg-success">
+                                <i class="bi bi-check-circle"></i> En stock ({{ product.stock }} unidades)
+                            </span>
+                        {% elseif product.stock > 0 %}
+                            <span class="badge bg-warning text-dark">
+                                <i class="bi bi-exclamation-triangle"></i> Últimas {{ product.stock }} unidades
+                            </span>
+                        {% else %}
+                            <span class="badge bg-danger">
+                                <i class="bi bi-x-circle"></i> Agotado
+                            </span>
+                        {% endif %}
+                    </div>
+
+                    {# Formulario de añadir al carrito #}
+                    {% if product.stock > 0 %}
+                    <form action="/carrito/add" method="post" class="mb-3">
+                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+                        <input type="hidden" name="productId" value="{{ product.id }}">
+
+                        <div class="row g-3 align-items-end">
+                            <div class="col-auto">
+                                <label for="quantity" class="form-label fw-bold">Cantidad:</label>
+                                <input type="number"
+                                       class="form-control"
+                                       id="quantity"
+                                       name="quantity"
+                                       value="1"
+                                       min="1"
+                                       max="{{ product.stock }}"
+                                       style="width: 100px;">
+                            </div>
+                            <div class="col">
+                                <button type="submit" class="btn btn-brand btn-lg w-100">
+                                    <i class="bi bi-cart-plus"></i> Añadir al carrito
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    {% else %}
+                    <button class="btn btn-secondary btn-lg w-100" disabled>
+                        <i class="bi bi-x-circle"></i> Producto agotado
+                    </button>
+                    {% endif %}
+
+                    {# Botón volver #}
+                    <div class="d-grid gap-2 mt-3">
+                        <a href="/productos" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left"></i> Volver a productos
+                        </a>
+                    </div>
+
+                    {# Información adicional #}
+                    <div class="mt-4 pt-4 border-top">
+                        <h5 class="fw-bold mb-3">Información adicional</h5>
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <i class="bi bi-truck text-brand-red"></i>
+                                <strong>Envío:</strong> Gratis en pedidos superiores a 50€
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-shield-check text-brand-red"></i>
+                                <strong>Garantía:</strong> 2 años
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-arrow-clockwise text-brand-red"></i>
+                                <strong>Devolución:</strong> 30 días
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-calendar-plus text-brand-red"></i>
+                                <strong>Añadido:</strong> {{ product.fechaAlta | date('dd/MM/yyyy') }}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# Sección de productos relacionados (opcional) #}
+    <div class="row mt-5">
+        <div class="col-12">
+            <h3 class="fw-bold text-brand-red mb-4">Productos relacionados</h3>
+            <p class="text-muted">Otros productos de la categoría {{ product.category }}</p>
+            {# Aquí podrías añadir una lista de productos relacionados #}
+        </div>
+    </div>
+</div>
+{% endblock %}
