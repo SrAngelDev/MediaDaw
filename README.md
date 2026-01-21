@@ -9,12 +9,6 @@
 
 **Proyecto de tienda online con gestión de inventario centralizado y control de stock en tiempo real**
 
-[Documentación](#-documentación) •
-[Características](#-características) •
-[Instalación](#-instalación) •
-[Uso](#-uso) •
-[Estructura](#-estructura)
-
 </div>
 
 ---
