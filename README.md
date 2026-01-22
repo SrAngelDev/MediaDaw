@@ -20,8 +20,8 @@
 ### 💾 Arquitectura de Datos
 
 **MediaDaw utiliza exclusivamente:**
-- ✅ **Spring Data JPA** con Hibernate (ORM)
-- ✅ **Bases de datos relacionales** (H2, MySQL, MariaDB)
+- ✅ **Spring Data JPA** con Hibernate
+- ✅ **Bases de datos relacionales** (H2, PostgreSQL)
 - ✅ **Relaciones bidireccionales** (@OneToOne, @OneToMany, @ManyToOne)
 - ✅ **Transacciones ACID** para garantizar consistencia
 
@@ -104,9 +104,9 @@
 │          BUSINESS LAYER             │
 │           (Services)                │
 │   - UserService                     │
-│   - ProductosService                  │
-│   - CarritoService    ⚠️            │
-│   - VentaService   ⚠️            │
+│   - ProductosService                │
+│   - CarritoService                  │
+│   - VentaService                    │
 └─────────────────────────────────────┘
                   ▼
 ┌─────────────────────────────────────┐
@@ -177,7 +177,7 @@
                            │ id          │
                            │ nombre      │
                            │ precio      │
-                           │ stock       │⚠️
+                           │ stock       │
                            │ category    │
                            │ deleted     │
                            └─────────────┘
@@ -262,7 +262,7 @@ MediaDaw/
 │   │   ├── Categoria.java             # Enum categorías
 │   │   └── EstadoPedido.java          # Enum estados pedido
 │   │
-│   ├── repositories/                  # Repositorios JPA (6)
+│   ├── repositories/                  # Repositorios JPA
 │   │   ├── UserRepository.java
 │   │   ├── ProductosRepository.java
 │   │   ├── CarritoRepository.java
@@ -270,18 +270,19 @@ MediaDaw/
 │   │   ├── VentaRepository.java
 │   │   └── LineaVentaRepository.java
 │   │
-│   ├── services/                      # Lógica de negocio (5)
+│   ├── services/                      # Lógica de negocio
 │   │   ├── UserService.java
 │   │   ├── ProductService.java
-│   │   ├── CarritoService.java        # ⚠️ Gestión del carrito
-│   │   ├── PurchaseService.java       # ⚠️ Gestión crítica de stock
-│   │   └── CartService.java           # (alias)
+│   │   ├── CarritoService.java        # Gestión del carrito
+│   │   └── PurchaseService.java       # Gestión crítica de stock
 │   │
-│   ├── controllers/                   # Controladores MVC (3+)
+│   ├── controllers/                   # Controladores 
 │   │   ├── HomeController.java
 │   │   ├── ProductController.java
+│   │   ├── CartController.java
+│   │   ├── AuthController.java
 │   │   └── AdminController.java
-│   │   # Pendientes: CartController, AuthController
+│   │   
 │   │
 │   ├── security/                      # Configuración de seguridad
 │   │   └── CustomUserDetailsService.java
@@ -429,18 +430,6 @@ MediaDaw/
 # Ejecutar tests con reporte
 ./gradlew test jacocoTestReport
 ```
-
----
-
-## 🤝 Contribuir
-
-Este es un proyecto educativo del módulo 2DAW. Si deseas contribuir:
-
-1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
 
 ---
 
