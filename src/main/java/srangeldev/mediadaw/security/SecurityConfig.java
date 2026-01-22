@@ -19,22 +19,41 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
+                        // Rutas públicas - acceso sin autenticación
+                        .requestMatchers("/", "/home", "/index").permitAll()
+                        .requestMatchers("/login", "/registro").permitAll()
+                        .requestMatchers("/productos", "/productos/**").permitAll()
+
+                        // Recursos estáticos
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
-                        .requestMatchers("/", "/productos/**", "/registro", "/error").permitAll()
+                        .requestMatchers("/favicon.ico", "/error").permitAll()
+
+                        // Rutas del carrito - requieren autenticación
+                        .requestMatchers("/carrito/**").authenticated()
+
+                        // Rutas de administración - requieren rol ADMIN
                         .requestMatchers("/admin/**").hasRole("ADMIN")
+
+                        // Cualquier otra ruta requiere autenticación
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/")
+                        .loginProcessingUrl("/login")
+                        .defaultSuccessUrl("/", true)
+                        .failureUrl("/login?error=true")
                         .permitAll()
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/")
+                        .logoutSuccessUrl("/login?logout=true")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
                         .permitAll()
                 )
-                .csrf(Customizer.withDefaults());
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers("/api/**")
+                );
 
         return http.build();
     }
