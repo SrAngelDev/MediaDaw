@@ -104,9 +104,9 @@
 │          BUSINESS LAYER             │
 │           (Services)                │
 │   - UserService                     │
-│   - ProductosService                  │
-│   - CarritoService    ⚠️            │
-│   - VentaService   ⚠️            │
+│   - ProductosService                │
+│   - CarritoService                  │
+│   - VentaService                    │
 └─────────────────────────────────────┘
                   ▼
 ┌─────────────────────────────────────┐
@@ -177,7 +177,7 @@
                            │ id          │
                            │ nombre      │
                            │ precio      │
-                           │ stock       │⚠️
+                           │ stock       │
                            │ category    │
                            │ deleted     │
                            └─────────────┘
@@ -270,18 +270,19 @@ MediaDaw/
 │   │   ├── VentaRepository.java
 │   │   └── LineaVentaRepository.java
 │   │
-│   ├── services/                      # Lógica de negocio (5)
+│   ├── services/                      # Lógica de negocio
 │   │   ├── UserService.java
 │   │   ├── ProductService.java
-│   │   ├── CarritoService.java        # ⚠️ Gestión del carrito
-│   │   ├── PurchaseService.java       # ⚠️ Gestión crítica de stock
-│   │   └── CartService.java           # (alias)
+│   │   ├── CarritoService.java        # Gestión del carrito
+│   │   └── PurchaseService.java       # Gestión crítica de stock
 │   │
-│   ├── controllers/                   # Controladores MVC (3+)
+│   ├── controllers/                   # Controladores 
 │   │   ├── HomeController.java
 │   │   ├── ProductController.java
+│   │   ├── CartController.java
+│   │   ├── AuthController.java
 │   │   └── AdminController.java
-│   │   # Pendientes: CartController, AuthController
+│   │   
 │   │
 │   ├── security/                      # Configuración de seguridad
 │   │   └── CustomUserDetailsService.java
