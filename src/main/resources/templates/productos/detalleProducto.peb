@@ -81,7 +81,7 @@
                     {# Formulario de añadir al carrito #}
                     {% if product.stock > 0 %}
                     <form action="/carrito/add" method="post" class="mb-3">
-                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+                        <input type="hidden" name="{{ _csrf.parameterName }}" value="{{ _csrf.token }}"/>
                         <input type="hidden" name="productId" value="{{ product.id }}">
 
                         <div class="row g-3 align-items-end">

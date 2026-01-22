@@ -6,7 +6,7 @@
     <meta name="description" content="MediaDaw - Tu tienda de equipamiento de producción musical">
     <meta name="author" content="MediaDaw Team">
 
-    {# CSRF Token para peticiones AJAX (Spring Security) #}
+    {# CSRF Token para peticiones (Spring Security) #}
     <meta name="_csrf" content="{{ _csrf.token }}">
     <meta name="_csrf_header" content="{{ _csrf.headerName }}">
 

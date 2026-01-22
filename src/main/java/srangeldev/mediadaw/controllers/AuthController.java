@@ -1,7 +1,9 @@
 package srangeldev.mediadaw.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,11 +34,12 @@ public class AuthController {
         if (error != null) {
             model.addAttribute("error", "Usuario o contraseña incorrectos.");
         }
+
         if (logout != null) {
             model.addAttribute("mensaje", "Has cerrado sesión correctamente.");
         }
 
-        return "auth/login"; 
+        return "auth/login";
     }
 
     /**
@@ -44,8 +47,8 @@ public class AuthController {
      */
     @GetMapping("/registro")
     public String registerForm(Model model) {
-        model.addAttribute("user", new User()); 
-        return "auth/register"; 
+        model.addAttribute("user", new User());
+        return "auth/register";
     }
 
     /**
@@ -55,11 +58,11 @@ public class AuthController {
     public String registerProcess(
             @Valid @ModelAttribute("user") User user,
             BindingResult bindingResult,
-            @RequestParam("confirmPassword") String confirmPassword, 
+            @RequestParam("confirmPassword") String confirmPassword,
             RedirectAttributes redirectAttributes,
             Model model) {
 
-        // 1. Validaciones básicas de campos 
+        // 1. Validaciones básicas de campos
         if (bindingResult.hasErrors()) {
             return "auth/register";
         }

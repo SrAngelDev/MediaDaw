@@ -1,11 +1,3 @@
-{#
-  Fragment: Header / Navbar de MediaDaw
-
-  Variables esperadas (desde GlobalControllerAdvice):
-  - currentUser: Usuario autenticado (puede ser null)
-  - cartItemCount: Número de productos en el carrito
-#}
-
 <header class="bg-brand-red sticky-top py-3 shadow-sm">
     <div class="container">
         <div class="d-flex flex-wrap align-items-center justify-content-between">
@@ -30,7 +22,7 @@
 
             {# Enlaces de usuario #}
             <div class="text-end text-white fw-bold d-flex gap-3 align-items-center">
-                {% if currentUser %}
+                {% if currentUser is not null%}
                     {# Usuario autenticado #}
                     <div class="dropdown">
                         <a href="#"
@@ -64,9 +56,9 @@
 
                             <li><hr class="dropdown-divider"></li>
                             <li>
-                                <form action="/logout" method="post" class="d-inline">
-                                    <input type="hidden" name="_csrf" value="{{ _csrf.token }}">
-                                    <button type="submit" class="dropdown-item text-danger">
+                                <form action="/logout" method="post" style="margin: 0;">
+                                    <input type="hidden" name="{{ _csrf.parameterName }}" value="{{ _csrf.token }}"/>
+                                    <button type="submit" class="dropdown-item text-danger" style="border: none; background: none; cursor: pointer; width: 100%; text-align: left;">
                                         <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
                                     </button>
                                 </form>
@@ -77,9 +69,6 @@
                     {# Usuario no autenticado #}
                     <a href="/login" class="text-white text-decoration-none">
                         <i class="bi bi-person-fill"></i> Iniciar Sesión
-                    </a>
-                    <a href="/registro" class="text-white text-decoration-none">
-                        <i class="bi bi-person-plus-fill"></i> Registro
                     </a>
                 {% endif %}
 

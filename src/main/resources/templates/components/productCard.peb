@@ -1,15 +1,9 @@
 {#
   Macro: productCard
   Renderiza una tarjeta de producto reutilizable
-
-  Parámetros:
-  - product: Objeto producto con todos sus datos
-  - showBadge: (opcional) Boolean para mostrar badge
-  - badgeText: (opcional) Texto del badge (ej: "TOP VENTAS", "OFERTA")
-  - badgeColor: (opcional) Color del badge (ej: "#FFCC00")
 #}
 
-{% macro productCard(product, showBadge, badgeText, badgeColor) %}
+{% macro productCard(product, csrf, showBadge, badgeText, badgeColor) %}
 <div class="card h-100 product-card border-0 shadow-sm">
     {# Badge opcional (TOP VENTAS, OFERTA, NOVEDAD, etc.) #}
     {% if showBadge %}
@@ -76,7 +70,7 @@
             {# Botón de añadir al carrito #}
             {% if product.stock > 0 %}
             <form action="/carrito/add" method="post" class="add-to-cart-form">
-                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+                <input type="hidden" name="{{ csrf.parameterName }}" value="{{ csrf.token }}"/>
                 <input type="hidden" name="productId" value="{{ product.id }}">
                 <input type="hidden" name="quantity" value="1">
                 <button type="submit" class="btn btn-brand btn-add-cart">

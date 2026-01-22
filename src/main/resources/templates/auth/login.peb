@@ -1,93 +1,91 @@
-    {% extends "../layouts/base" %}
+    {% extends "layouts/base" %}
 
-        {% block title %}Iniciar Sesión - MediaDAW{% endblock %}
+        {% block title %}Iniciar Sesión - MediaDaw{% endblock %}
 
     {% block content %}
-<div class="container">
-    <div class="row justify-content-center mt-5">
+<div class="container py-5">
+    <div class="row justify-content-center">
         <div class="col-md-5">
-            <div class="card shadow-lg">
-                <div class="card-header bg-primary text-white text-center">
-                    <h3 class="mb-0">
-                        <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
-                    </h3>
-                </div>
-                <div class="card-body p-4">
-                    {% if error %}
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <i class="bi bi-exclamation-triangle-fill"></i> {{ error }}
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <h2 class="fw-bold" style="color: #E30613;">Iniciar Sesión</h2>
+                        <p class="text-muted">Accede a tu cuenta</p>
+                    </div>
+
+                    {% if param.error is not null %}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert" style="background-color: #fdeaea; border-color: #E30613; color: #E30613;">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        Usuario o contraseña incorrectos
                         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     </div>
                     {% endif %}
 
-        {% if mensaje %}
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <i class="bi bi-check-circle-fill"></i> {{ mensaje }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
+                    {% if param.logout is not null %}
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="bi bi-check-circle-fill me-2"></i>
+                            Has cerrado sesión correctamente
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
                     {% endif %}
 
-                    <form action="/login" method="post">
+                    <form method="post" action="/login">
+                        <input type="hidden" name="{{ _csrf.parameterName }}" value="{{ _csrf.token }}"/>
+
                         <div class="mb-3">
-                            <label for="username" class="form-label">
-                                <i class="bi bi-person-fill"></i> Usuario o Email
-                            </label>
-                            <input type="text"
-                                   class="form-control"
-                                   id="username"
-                                   name="username"
-                                   placeholder="Ingresa tu usuario o email"
-                                   required
-                                   autofocus>
+                            <label for="username" class="form-label fw-semibold">Usuario</label>
+                            <input type="text" class="form-control" id="username" name="username"
+                                   placeholder="Ingresa tu usuario" required autofocus>
                         </div>
 
-                        <div class="mb-3">
-                            <label for="password" class="form-label">
-                                <i class="bi bi-lock-fill"></i> Contraseña
-                            </label>
-                            <input type="password"
-                                   class="form-control"
-                                   id="password"
-                                   name="password"
-                                   placeholder="Ingresa tu contraseña"
-                                   required>
+                        <div class="mb-4">
+                            <label for="password" class="form-label fw-semibold">Contraseña</label>
+                            <input type="password" class="form-control" id="password" name="password"
+                                   placeholder="Ingresa tu contraseña" required>
                         </div>
 
                         <div class="mb-3 form-check">
-                            <input type="checkbox"
-                                   class="form-check-input"
-                                   id="remember-me"
-                                   name="remember-me">
-                            <label class="form-check-label" for="remember-me">
-                                Recordarme
-                            </label>
+                            <input type="checkbox" class="form-check-input" id="remember-me" name="remember-me">
+                            <label class="form-check-label" for="remember-me">Recordarme</label>
                         </div>
 
-                        <input type="hidden" name="{{ _csrf.parameterName }}" value="{{ _csrf.token }}">
-
-                        <button type="submit" class="btn btn-primary w-100 mb-3">
-                            <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
+                        <button type="submit" class="btn w-100 py-2 fw-semibold text-white" style="background-color: #E30613; border: none;">
+                            <i class="bi bi-box-arrow-in-right me-2"></i>Iniciar Sesión
                         </button>
                     </form>
 
-                    <hr>
+                    <hr class="my-4">
 
                     <div class="text-center">
-                        <p class="mb-0">¿No tienes cuenta?
-                            <a href="/registro" class="text-decoration-none">
-                                <strong>Regístrate aquí</strong>
-                            </a>
-                        </p>
+                        <p class="text-muted mb-2">¿No tienes cuenta?</p>
+                        <a href="/registro" class="btn btn-outline-secondary">
+                            <i class="bi bi-person-plus me-2"></i>Crear una cuenta
+                        </a>
                     </div>
                 </div>
-            </div>
-
-            <div class="text-center mt-3">
-                <a href="/" class="text-muted text-decoration-none">
-                    <i class="bi bi-arrow-left"></i> Volver al inicio
-                </a>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .btn-outline-secondary {
+        border-color: #E30613;
+        color: #E30613;
+    }
+
+    .btn-outline-secondary:hover {
+        background-color: #E30613;
+        border-color: #E30613;
+        color: white;
+    }
+    .form-check-input:checked {
+        background-color: #E30613;
+        border-color: #E30613;
+    }
+    .form-control:focus {
+        border-color: #E30613;
+        box-shadow: 0 0 0 0.2rem rgba(227, 6, 19, 0.25);
+    }
+</style>
 {% endblock %}

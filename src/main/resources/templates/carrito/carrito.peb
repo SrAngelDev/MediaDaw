@@ -1,4 +1,4 @@
-    {% extends "../layout/base.peb.html" %}
+    {% extends "layouts/base" %}
 
         {% block title %}Mi Carrito - MediaDAW{% endblock %}
 
@@ -55,6 +55,7 @@
                                 <td>{{ item.producto.precio }}€</td>
                                 <td>
                                     <form action="/carrito/item/{{ item.producto.id }}" method="post" class="d-inline">
+                                        <input type="hidden" name="{{ _csrf.parameterName }}" value="{{ _csrf.token }}"/>
                                         <input type="hidden" name="_method" value="put">
                                         <div class="input-group" style="width: 120px;">
                                             <button type="submit" name="quantity" value="{{ item.cantidad - 1 }}"
@@ -75,6 +76,7 @@
                                 <td><strong>{{ item.subtotal }}€</strong></td>
                                 <td>
                                     <form action="/carrito/item/{{ item.producto.id }}" method="post" class="d-inline">
+                                        <input type="hidden" name="{{ _csrf.parameterName }}" value="{{ _csrf.token }}"/>
                                         <input type="hidden" name="_method" value="delete">
                                         <button type="submit" class="btn btn-sm btn-danger"
                                                 onclick="return confirm('¿Eliminar este producto?');">
@@ -108,11 +110,16 @@
                     <div class="d-flex justify-content-between mb-3">
                         <strong>Total:</strong>
                         <strong class="text-primary fs-4">{{ total }}€</strong>
-                    </div><form action="/carrito/checkout" method="post">
+                    </div>
+
+                    <form action="/carrito/checkout" method="post">
+                        <input type="hidden" name="{{ _csrf.parameterName }}" value="{{ _csrf.token }}"/>
                         <button type="submit" class="btn btn-primary w-100 mb-2">
                             <i class="bi bi-credit-card"></i> Finalizar Compra
                         </button>
-                    </form><a href="/productos" class="btn btn-outline-secondary w-100">
+                    </form>
+
+                    <a href="/productos" class="btn btn-outline-secondary w-100">
                         <i class="bi bi-arrow-left"></i> Seguir Comprando
                     </a>
                 </div>

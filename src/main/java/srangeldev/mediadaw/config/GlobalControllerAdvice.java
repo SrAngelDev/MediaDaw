@@ -1,9 +1,11 @@
 package srangeldev.mediadaw.config;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import srangeldev.mediadaw.models.User;
@@ -23,6 +25,12 @@ public class GlobalControllerAdvice {
 
     private final UserService userService;
     private final CarritoService carritoService;
+
+    @ModelAttribute("_csrf")
+    public CsrfToken getCsrfToken(HttpServletRequest request) {
+        // Esto hace que {{ _csrf }} esté disponible en TODAS tus vistas Pebble
+        return (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+    }
 
     /**
      * Expone el usuario autenticado a todas las vistas.

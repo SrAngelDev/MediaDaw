@@ -1,7 +1,7 @@
 package srangeldev.mediadaw.services;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import srangeldev.mediadaw.exceptions.PurchaseNotFoundException;
@@ -78,7 +78,7 @@ public class VentaService {
     }
 
     private static @NonNull List<LineaCarrito> getLineaCarritos(Carrito carrito) {
-        List<LineaCarrito> lineaCarritos = carrito.getLineaCarritos();
+        List<LineaCarrito> lineaCarritos = carrito.getLineasCarrito();
 
         if (lineaCarritos.isEmpty()) {
             throw new RuntimeException("El carrito está vacío");

@@ -44,7 +44,8 @@ public class CarritoController {
         Carrito carrito = carritoService.getCart(user);
 
         model.addAttribute("carrito", carrito);
-        model.addAttribute("total", carrito.getTotal()); // Total del carrito usando el helper
+        model.addAttribute("items", carrito.getLineasCarrito());
+        model.addAttribute("total", carrito.getTotal());
 
         return "carrito/carrito";
     }

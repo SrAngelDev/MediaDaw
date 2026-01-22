@@ -19,20 +19,20 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        // Rutas públicas - acceso sin autenticación
-                        .requestMatchers("/", "/home", "/index").permitAll()
-                        .requestMatchers("/login", "/registro").permitAll()
-                        .requestMatchers("/productos", "/productos/**").permitAll()
-
-                        // Recursos estáticos
+                        // Recursos estáticos primero
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
                         .requestMatchers("/favicon.ico", "/error").permitAll()
 
-                        // Rutas del carrito - requieren autenticación
-                        .requestMatchers("/carrito/**").authenticated()
+                        // Rutas públicas - acceso sin autenticación
+                        .requestMatchers("/", "/home", "/index").permitAll()
+                        .requestMatchers("/login", "/registro", "/auth/**").permitAll()
+                        .requestMatchers("/productos", "/productos/**").permitAll()
 
                         // Rutas de administración - requieren rol ADMIN
                         .requestMatchers("/admin/**").hasRole("ADMIN")
+
+                        // Rutas del carrito - requieren autenticación (consolidadas)
+                        .requestMatchers("/carrito/**").authenticated()
 
                         // Cualquier otra ruta requiere autenticación
                         .anyRequest().authenticated()
@@ -49,11 +49,10 @@ public class SecurityConfig {
                         .logoutSuccessUrl("/login?logout=true")
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
+                        .clearAuthentication(true)
                         .permitAll()
                 )
-                .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/api/**")
-                );
+                .csrf(Customizer.withDefaults());
 
         return http.build();
     }

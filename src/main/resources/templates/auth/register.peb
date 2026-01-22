@@ -1,156 +1,101 @@
-    {% extends "../layouts/base" %}
+    {% extends "layouts/base" %}
 
-        {% block title %}Registro - MediaDAW{% endblock %}
+        {% block title %}Registro - MediaDaw{% endblock %}
 
     {% block content %}
-<div class="container">
-    <div class="row justify-content-center mt-5">
+<div class="container py-5">
+    <div class="row justify-content-center">
         <div class="col-md-6">
-            <div class="card shadow-lg">
-                <div class="card-header bg-success text-white text-center">
-                    <h3 class="mb-0">
-                        <i class="bi bi-person-plus-fill"></i> Crear Cuenta
-                    </h3>
-                </div>
-                <div class="card-body p-4">
-                    {% if error %}
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <i class="bi bi-exclamation-triangle-fill"></i> {{ error }}
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <h2 class="fw-bold" style="color: #E30613;">Crear Cuenta</h2>
+                        <p class="text-muted">Únete a nuestra tienda</p>
+                    </div>
+
+                    {% if error is not null %}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert" style="background-color: #fdeaea; border-color: #E30613; color: #E30613;">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        {{ error }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     </div>
                     {% endif %}
 
-                    <form action="/registro" method="post" novalidate>
-                        <div class="mb-3">
-                            <label for="username" class="form-label">
-                                <i class="bi bi-person"></i> Nombre de Usuario *
-                            </label>
-                            <input type="text"
-                                   class="form-control {% if user.username and user.username != '' %}is-invalid{% endif %}"
-                                   id="username"
-                                   name="username"
-                                   value="{{ user.username }}"
-                                   placeholder="Ej: juan123"
-                                   required
-                                   autofocus>
-                            {% if user.username %}
-                            <div class="invalid-feedback">
-                                {{ user.username }}
-                            </div>
-                            {% endif %}
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="email" class="form-label">
-                                <i class="bi bi-envelope"></i> Correo Electrónico *
-                            </label>
-                            <input type="email"
-                                   class="form-control {% if user.email and user.email != '' %}is-invalid{% endif %}"
-                                   id="email"
-                                   name="email"
-                                   value="{{ user.email }}"
-                                   placeholder="tu@email.com"
-                                   required>
-                            {% if user.email %}
-                            <div class="invalid-feedback">
-                                {{ user.email }}
-                            </div>
-                            {% endif %}
-                        </div>
+                    <form method="post" action="/registro">
+                        <input type="hidden" name="{{ _csrf.parameterName }}" value="{{ _csrf.token }}"/>
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="firstName" class="form-label">
-                                    <i class="bi bi-person-badge"></i> Nombre
-                                </label>
-                                <input type="text"
-                                       class="form-control"
-                                       id="firstName"
-                                       name="firstName"
-                                       value="{{ user.firstName }}"
-                                       placeholder="Juan">
+                                <label for="nombre" class="form-label fw-semibold">Nombre</label>
+                                <input type="text" class="form-control" id="nombre" name="nombre"
+                                       placeholder="Tu nombre" required>
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label for="lastName" class="form-label">
-                                    <i class="bi bi-person-badge-fill"></i> Apellidos
-                                </label>
-                                <input type="text"
-                                       class="form-control"
-                                       id="lastName"
-                                       name="lastName"
-                                       value="{{ user.lastName }}"
-                                       placeholder="Pérez García">
+                                <label for="apellidos" class="form-label fw-semibold">Apellidos</label>
+                                <input type="text" class="form-control" id="apellidos" name="apellidos"
+                                       placeholder="Tus apellidos" required>
                             </div>
                         </div>
 
                         <div class="mb-3">
-                            <label for="password" class="form-label">
-                                <i class="bi bi-lock"></i> Contraseña *
-                            </label>
-                            <input type="password"
-                                   class="form-control {% if user.password and user.password != '' %}is-invalid{% endif %}"
-                                   id="password"
-                                   name="password"
-                                   placeholder="Mínimo 6 caracteres"
-                                   required>
-                            {% if user.password %}
-                            <div class="invalid-feedback">
-                                {{ user.password }}
-                            </div>
-                            {% endif %}
-                            <small class="form-text text-muted">
-                                Mínimo 6 caracteres
-                            </small>
+                            <label for="username" class="form-label fw-semibold">Usuario</label>
+                            <input type="text" class="form-control" id="username" name="username"
+                                   placeholder="Nombre de usuario" required>
                         </div>
 
                         <div class="mb-3">
-                            <label for="confirmPassword" class="form-label">
-                                <i class="bi bi-lock-fill"></i> Confirmar Contraseña *
-                            </label>
-                            <input type="password"
-                                   class="form-control"
-                                   id="confirmPassword"
-                                   name="confirmPassword"
-                                   placeholder="Repite tu contraseña"
-                                   required>
+                            <label for="email" class="form-label fw-semibold">Email</label>
+                            <input type="email" class="form-control" id="email" name="email"
+                                   placeholder="correo@ejemplo.com" required>
                         </div>
 
-                        <div class="mb-3 form-check">
-                            <input type="checkbox"
-                                   class="form-check-input"
-                                   id="terms"
-                                   required>
-                            <label class="form-check-label" for="terms">
-                                Acepto los <a href="#" class="text-decoration-none">términos y condiciones</a>
-                            </label>
+                        <div class="mb-3">
+                            <label for="password" class="form-label fw-semibold">Contraseña</label>
+                            <input type="password" class="form-control" id="password" name="password"
+                                   placeholder="Mínimo 6 caracteres" required minlength="6">
                         </div>
 
-                        <input type="hidden" name="{{ _csrf.parameterName }}" value="{{ _csrf.token }}">
+                        <div class="mb-4">
+                            <label for="confirmPassword" class="form-label fw-semibold">Confirmar Contraseña</label>
+                            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword"
+                                   placeholder="Repite tu contraseña" required>
+                        </div>
 
-                        <button type="submit" class="btn btn-success w-100 mb-3">
-                            <i class="bi bi-person-plus"></i> Registrarse
+                        <button type="submit" class="btn w-100 py-2 fw-semibold text-white" style="background-color: #E30613; border: none;">
+                            <i class="bi bi-person-plus me-2"></i>Crear Cuenta
                         </button>
                     </form>
 
-                    <hr>
+                    <hr class="my-4">
 
                     <div class="text-center">
-                        <p class="mb-0">¿Ya tienes cuenta?
-                            <a href="/login" class="text-decoration-none">
-                                <strong>Inicia sesión</strong>
-                            </a>
-                        </p>
+                        <p class="text-muted mb-2">¿Ya tienes una cuenta?</p>
+                        <a href="/login" class="btn btn-outline-secondary">
+                            <i class="bi bi-box-arrow-in-right me-2"></i>Iniciar Sesión
+                        </a>
                     </div>
                 </div>
-            </div>
-
-            <div class="text-center mt-3">
-                <a href="/" class="text-muted text-decoration-none">
-                    <i class="bi bi-arrow-left"></i> Volver al inicio
-                </a>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .btn-outline-secondary {
+        border-color: #E30613;
+        color: #E30613;
+    }
+
+    .btn-outline-secondary:hover {
+        background-color: #E30613;
+        border-color: #E30613;
+        color: white;
+    }
+
+    .form-control:focus {
+        border-color: #E30613;
+        box-shadow: 0 0 0 0.2rem rgba(227, 6, 19, 0.25);
+    }
+</style>
 {% endblock %}

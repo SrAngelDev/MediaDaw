@@ -28,7 +28,7 @@ public class Carrito {
     // Relación 1:N con las líneas del carrito (Un carrito tiene muchas líneas)
     @OneToMany(mappedBy = "carrito", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @Builder.Default
-    private List<LineaCarrito> lineaCarritos = new ArrayList<>();
+    private List<LineaCarrito> lineasCarrito = new ArrayList<>();
 
     @Builder.Default
     private LocalDateTime updatedAt = LocalDateTime.now();
@@ -37,7 +37,7 @@ public class Carrito {
      * Helper para recalcular el total dinámicamente
      */
     public Double getTotal() {
-        return lineaCarritos.stream()
+        return lineasCarrito.stream()
                 .mapToDouble(LineaCarrito::getSubtotal)
                 .sum();
     }
@@ -46,19 +46,23 @@ public class Carrito {
      * Helper para contar productos (suma de cantidades)
      */
     public Integer getTotalItems() {
-        return lineaCarritos.stream()
+        return lineasCarrito.stream()
                 .mapToInt(LineaCarrito::getCantidad)
                 .sum();
     }
 
+    public List<LineaCarrito> getItems() {
+        return this.lineasCarrito;
+    }
+
     // Método helper para añadir líneas sincronizando la relación bidireccional
     public void addLineaCarrito(LineaCarrito item) {
-        lineaCarritos.add(item);
+        lineasCarrito.add(item);
         item.setCarrito(this);
     }
 
     public void removeLineaCarrito(LineaCarrito item) {
-        lineaCarritos.remove(item);
+        lineasCarrito.remove(item);
         item.setCarrito(null);
     }
 }

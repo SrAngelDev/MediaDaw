@@ -39,7 +39,7 @@ public class CarritoService {
      */
     @Transactional(readOnly = true)
     public Carrito getCart(User user) {
-        return carritoRepository.findByUser(user)
+        return carritoRepository.findByUserIdWithLineas(user.getId())
                 .orElseGet(() -> createEmptyCart(user));
     }
 
@@ -83,7 +83,7 @@ public class CarritoService {
         }
 
         // 1. Verificar si el producto ya está en el carrito
-        Optional<LineaCarrito> existingItem = cart.getLineaCarritos().stream()
+        Optional<LineaCarrito> existingItem = cart.getLineasCarrito().stream()
                 .filter(item -> item.getProductos().getId().equals(productId))
                 .findFirst();
 
@@ -138,7 +138,7 @@ public class CarritoService {
     public void removeFromCart(User user, Long productId) {
         Carrito cart = getCart(user);
 
-        LineaCarrito itemToRemove = cart.getLineaCarritos().stream()
+        LineaCarrito itemToRemove = cart.getLineasCarrito().stream()
                 .filter(item -> item.getProductos().getId().equals(productId))
                 .findFirst()
                 .orElseThrow(() -> new ProductNotFoundException("El producto no está en el carrito"));
@@ -160,10 +160,10 @@ public class CarritoService {
         Carrito cart = getCart(user);
 
         // Borramos todos los items de la base de datos
-        lineaCarritoRepository.deleteAll(cart.getLineaCarritos());
+        lineaCarritoRepository.deleteAll(cart.getLineasCarrito());
 
         // Limpiamos la lista en memoria
-        cart.getLineaCarritos().clear();
+        cart.getLineasCarrito().clear();
         cart.setUpdatedAt(LocalDateTime.now());
         carritoRepository.save(cart);
     }
@@ -183,7 +183,7 @@ public class CarritoService {
         }
 
         Carrito cart = getCart(user);
-        LineaCarrito item = cart.getLineaCarritos().stream()
+        LineaCarrito item = cart.getLineasCarrito().stream()
                 .filter(i -> i.getProductos().getId().equals(productId))
                 .findFirst()
                 .orElseThrow(() -> new ProductNotFoundException("Producto no en carrito"));
@@ -263,7 +263,7 @@ public class CarritoService {
                 .orElseThrow(() -> new UserNotFoundException(userId));
 
         return carritoRepository.findByUser(user)
-                .map(c -> c.getLineaCarritos().isEmpty())
+                .map(c -> c.getLineasCarrito().isEmpty())
                 .orElse(true);
     }
 }

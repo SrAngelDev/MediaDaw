@@ -1,17 +1,5 @@
 {#
   Vista: Página principal de MediaDaw
-
-  Extiende de: layouts/base.peb
-  Usa macro: components/productCard.peb
-
-  Variables recibidas del controlador:
-  - products: Lista de productos destacados
-  - categories: Array de categorías de productos
-
-  Variables automáticas (GlobalControllerAdvice):
-  - currentUser: Usuario autenticado
-  - cartItemCount: Contador del carrito
-  - isAdmin: Boolean de rol admin
 #}
 
 {% extends "layouts/base" %}
@@ -59,13 +47,13 @@
                 #}
                 {% if loop.index == 1 %}
                     {# Primer producto: TOP VENTAS con badge amarillo MediaMarkt #}
-                    {{ productCard(product, true, 'TOP VENTAS', '#FFCC00') }}
+                    {{ productCard(product, _csrf,  true, 'TOP VENTAS', '#FFCC00') }}
                 {% elseif product.stock <= 5 and product.stock > 0 %}
                     {# Producto con stock bajo: OFERTA con badge amarillo #}
-                    {{ productCard(product, true, 'OFERTA', '#FFCC00') }}
+                    {{ productCard(product, _csrf, true, 'OFERTA', '#FFCC00') }}
                 {% else %}
                     {# Producto normal sin badge #}
-                    {{ productCard(product) }}
+                    {{ productCard(product, _csrf) }}
                 {% endif %}
             {% endfor %}
         </div>

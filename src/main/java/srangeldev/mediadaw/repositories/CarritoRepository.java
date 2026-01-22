@@ -32,7 +32,7 @@ public interface CarritoRepository extends JpaRepository<Carrito, Long> {
      * Busca el carrito de un usuario con sus líneas cargadas (EAGER)
      * Útil para evitar N+1 queries al mostrar el carrito completo
      */
-    @Query("SELECT c FROM Carrito c LEFT JOIN FETCH c.lineaCarritos lc LEFT JOIN FETCH lc.productos WHERE c.user.id = :userId")
+    @Query("SELECT c FROM Carrito c LEFT JOIN FETCH c.lineasCarrito lc LEFT JOIN FETCH lc.productos WHERE c.user.id = :userId")
     Optional<Carrito> findByUserIdWithLineas(Long userId);
 
     /**

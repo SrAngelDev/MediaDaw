@@ -89,10 +89,10 @@
                 <div class="col">
                     {% if product.stock <= 5 and product.stock > 0 %}
                         {# Producto con stock bajo: OFERTA #}
-                        {{ productCard(product, true, 'OFERTA', '#FFCC00') }}
+                        {{ productCard(product, _csrf, true, 'OFERTA', '#FFCC00') }}
                     {% else %}
                         {# Producto normal #}
-                        {{ productCard(product) }}
+                        {{ productCard(product, _csrf) }}
                     {% endif %}
                 </div>
                 {% endfor %}
