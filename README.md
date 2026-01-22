@@ -20,8 +20,8 @@
 ### 💾 Arquitectura de Datos
 
 **MediaDaw utiliza exclusivamente:**
-- ✅ **Spring Data JPA** con Hibernate (ORM)
-- ✅ **Bases de datos relacionales** (H2, MySQL, MariaDB)
+- ✅ **Spring Data JPA** con Hibernate
+- ✅ **Bases de datos relacionales** (H2, PostgreSQL)
 - ✅ **Relaciones bidireccionales** (@OneToOne, @OneToMany, @ManyToOne)
 - ✅ **Transacciones ACID** para garantizar consistencia
 
