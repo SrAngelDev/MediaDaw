@@ -34,14 +34,4 @@ public interface CarritoRepository extends JpaRepository<Carrito, Long> {
      */
     @Query("SELECT c FROM Carrito c LEFT JOIN FETCH c.lineasCarrito lc LEFT JOIN FETCH lc.productos WHERE c.user.id = :userId")
     Optional<Carrito> findByUserIdWithLineas(Long userId);
-
-    /**
-     * Verifica si un usuario tiene un carrito
-     */
-    boolean existsByUserId(Long userId);
-
-    /**
-     * Elimina el carrito de un usuario
-     */
-    void deleteByUser(User user);
 }

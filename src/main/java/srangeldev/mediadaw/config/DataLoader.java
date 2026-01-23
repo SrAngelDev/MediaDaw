@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import srangeldev.mediadaw.models.*;
 import srangeldev.mediadaw.repositories.ProductosRepository;
 import srangeldev.mediadaw.repositories.UserRepository;
+import srangeldev.mediadaw.repositories.VentaRepository;
 
 /**
  * Carga datos de ejemplo en la base de datos al iniciar la aplicación.
@@ -18,6 +19,7 @@ public class DataLoader implements CommandLineRunner {
 
     private final UserRepository userRepository;
     private final ProductosRepository productosRepository;
+    private final VentaRepository ventaRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -27,6 +29,9 @@ public class DataLoader implements CommandLineRunner {
 
         // Crear productos de ejemplo
         createProducts();
+
+        // Crear pedidos de ejemplo
+        createOrders();
 
         System.out.println("✅ Datos de ejemplo cargados correctamente");
     }
@@ -178,6 +183,123 @@ public class DataLoader implements CommandLineRunner {
                     .build());
 
             System.out.println("📦 " + productosRepository.count() + " productos de ejemplo creados");
+        }
+    }
+
+    private void createOrders() {
+        if (ventaRepository.count() == 0) {
+            User cliente = userRepository.findByEmail("cliente@mediadaw.com").orElse(null);
+            User admin = userRepository.findByEmail("admin@mediadaw.com").orElse(null);
+
+            if (cliente == null || admin == null) {
+                System.out.println("⚠️ No se pudieron crear pedidos: usuarios no encontrados");
+                return;
+            }
+
+            // Obtener algunos productos
+            Productos iphone = productosRepository.findById(3L).orElse(null);
+            Productos jbl = productosRepository.findById(2L).orElse(null);
+            Productos ps5 = productosRepository.findById(7L).orElse(null);
+            Productos macbook = productosRepository.findById(5L).orElse(null);
+            Productos gopro = productosRepository.findById(10L).orElse(null);
+
+            // Pedido 1: Cliente - PENDIENTE
+            if (iphone != null && jbl != null) {
+                Venta pedido1 = Venta.builder()
+                        .user(cliente)
+                        .estado(EstadoPedido.PENDIENTE)
+                        .build();
+
+                LineaVenta linea1 = LineaVenta.builder()
+                        .productos(iphone)
+                        .cantidad(1)
+                        .precioVenta(iphone.getPrecio())
+                        .venta(pedido1)
+                        .build();
+
+                LineaVenta linea2 = LineaVenta.builder()
+                        .productos(jbl)
+                        .cantidad(2)
+                        .precioVenta(jbl.getPrecio())
+                        .venta(pedido1)
+                        .build();
+
+                pedido1.addOrderLine(linea1);
+                pedido1.addOrderLine(linea2);
+                pedido1.setTotal(pedido1.calculateTotal());
+
+                ventaRepository.save(pedido1);
+            }
+
+            // Pedido 2: Cliente - ENVIADO
+            if (ps5 != null) {
+                Venta pedido2 = Venta.builder()
+                        .user(cliente)
+                        .estado(EstadoPedido.ENVIADO)
+                        .build();
+
+                LineaVenta linea1 = LineaVenta.builder()
+                        .productos(ps5)
+                        .cantidad(1)
+                        .precioVenta(ps5.getPrecio())
+                        .venta(pedido2)
+                        .build();
+
+                pedido2.addOrderLine(linea1);
+                pedido2.setTotal(pedido2.calculateTotal());
+
+                ventaRepository.save(pedido2);
+            }
+
+            // Pedido 3: Admin - ENTREGADO
+            if (macbook != null && gopro != null) {
+                Venta pedido3 = Venta.builder()
+                        .user(admin)
+                        .estado(EstadoPedido.ENTREGADO)
+                        .build();
+
+                LineaVenta linea1 = LineaVenta.builder()
+                        .productos(macbook)
+                        .cantidad(1)
+                        .precioVenta(macbook.getPrecio())
+                        .venta(pedido3)
+                        .build();
+
+                LineaVenta linea2 = LineaVenta.builder()
+                        .productos(gopro)
+                        .cantidad(1)
+                        .precioVenta(gopro.getPrecio())
+                        .venta(pedido3)
+                        .build();
+
+                pedido3.addOrderLine(linea1);
+                pedido3.addOrderLine(linea2);
+                pedido3.setTotal(pedido3.calculateTotal());
+
+                ventaRepository.save(pedido3);
+            }
+
+            // Pedido 4: Cliente - ENTREGADO
+            if (jbl != null) {
+                Venta pedido4 = Venta.builder()
+                        .user(cliente)
+                        .estado(EstadoPedido.ENTREGADO)
+                        .build();
+
+                LineaVenta linea1 = LineaVenta.builder()
+                        .productos(jbl)
+                        .cantidad(3)
+                        .precioVenta(jbl.getPrecio())
+                        .venta(pedido4)
+                        .build();
+
+                pedido4.addOrderLine(linea1);
+                pedido4.setTotal(pedido4.calculateTotal());
+
+                ventaRepository.save(pedido4);
+            }
+
+            System.out.println("🛒 " + ventaRepository.count() + " pedidos de ejemplo creados");
         }
     }
 }

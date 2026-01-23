@@ -58,16 +58,6 @@ public class CarritoService {
     /**
      * Añade un producto al carrito gestionando el STOCK y cantidades.
      *
-     * LÓGICA:
-     * 1. Obtener o crear el carrito del usuario
-     * 2. Verificar si el producto ya está en el carrito
-     * 3. Si existe: incrementar cantidad (validando stock)
-     * 4. Si no existe: crear nueva línea (validando stock)
-     * 5. Actualizar updatedAt del carrito
-     *
-     * @param user Usuario que añade el producto
-     * @param productId ID del producto a añadir
-     * @param quantity Cantidad a añadir
      */
     public void addToCart(User user, Long productId, Integer quantity) {
         // Obtener o crear carrito
@@ -131,9 +121,6 @@ public class CarritoService {
 
     /**
      * Elimina un item específico del carrito.
-     *
-     * @param user Usuario propietario del carrito
-     * @param productId ID del producto a eliminar
      */
     public void removeFromCart(User user, Long productId) {
         Carrito cart = getCart(user);
@@ -154,7 +141,6 @@ public class CarritoService {
     /**
      * Vacía el carrito por completo.
      *
-     * @param user Usuario propietario del carrito
      */
     public void clearCart(User user) {
         Carrito cart = getCart(user);
@@ -171,10 +157,6 @@ public class CarritoService {
     /**
      * Actualiza la cantidad exacta de un item.
      * Si la cantidad es <= 0, elimina el item.
-     *
-     * @param user Usuario propietario del carrito
-     * @param productId ID del producto a actualizar
-     * @param quantity Nueva cantidad deseada
      */
     public void updateQuantity(User user, Long productId, Integer quantity) {
         if (quantity <= 0) {
@@ -207,9 +189,6 @@ public class CarritoService {
 
     /**
      * Calcula el total del carrito de un usuario.
-     *
-     * @param userId ID del usuario
-     * @return Total del carrito
      */
     @Transactional(readOnly = true)
     public Double getCartTotal(Long userId) {
@@ -223,9 +202,6 @@ public class CarritoService {
 
     /**
      * Cuenta el número total de items en el carrito (suma de cantidades).
-     *
-     * @param userId ID del usuario
-     * @return Cantidad total de items
      */
     @Transactional(readOnly = true)
     public long getCartItemCount(Long userId) {
@@ -240,9 +216,6 @@ public class CarritoService {
     /**
      * Obtiene el carrito de un usuario por su ID.
      * Útil para controladores que trabajan con userId directamente.
-     *
-     * @param userId ID del usuario
-     * @return Carrito del usuario
      */
     @Transactional(readOnly = true)
     public Carrito getCartByUserId(Long userId) {
@@ -253,9 +226,6 @@ public class CarritoService {
 
     /**
      * Verifica si el carrito de un usuario está vacío.
-     *
-     * @param userId ID del usuario
-     * @return true si el carrito está vacío, false en caso contrario
      */
     @Transactional(readOnly = true)
     public boolean isCartEmpty(Long userId) {

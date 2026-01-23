@@ -16,20 +16,5 @@ import java.util.Optional;
 @Repository
 public interface LineaCarritoRepository extends JpaRepository<LineaCarrito, Long> {
 
-    /**
-     * Busca una línea específica dentro de un carrito para un producto
-     * Útil para verificar si un producto ya está en el carrito antes de añadir
-     */
-    Optional<LineaCarrito> findByCarritoIdAndProductosId(Long carritoId, Long productosId);
-
-    /**
-     * Obtiene todas las líneas de un carrito
-     */
-    List<LineaCarrito> findByCarritoId(Long carritoId);
-
-    /**
-     * Elimina todas las líneas de un carrito (usado al vaciar el carrito o finalizar compra)
-     */
-    void deleteByCarritoId(Long carritoId);
 }
 

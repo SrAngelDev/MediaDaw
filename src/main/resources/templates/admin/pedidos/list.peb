@@ -30,9 +30,9 @@
                     {% for purchase in purchases %}
                     <tr>
                         <td>{{ purchase.id }}</td>
-                        <td>{{ purchase.usuario.username }}</td>
-                        <td>{{ purchase.fecha | date("dd/MM/yyyy HH:mm") }}</td>
-                        <td>{{ purchase.precioTotal | numberformat("#,##0.00") }}€</td>
+                        <td>{{ purchase.user.username }}</td>
+                        <td>{{ purchase.fechaCompra }}</td>
+                        <td>{{ purchase.total }}€</td>
                         <td><span class="badge
                                 {% if purchase.estado.name() == 'PENDIENTE' %}bg-warning
                                 {% elseif purchase.estado.name() == 'ENVIADO' %}bg-info
