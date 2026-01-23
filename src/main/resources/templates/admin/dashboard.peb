@@ -1,0 +1,86 @@
+{% extends "layouts/base" %}
+
+    {% block title %}Panel de Administración{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Panel de Administración</h1>
+
+    <div class="row">
+        <!-- Total de productos -->
+        <div class="col-md-3">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Total Productos</h5>
+                    <p class="card-text display-4">{{ totalProducts }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Productos con bajo stock -->
+        <div class="col-md-3">
+            <div class="card text-white bg-warning mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Bajo Stock</h5>
+                    <p class="card-text display-4">{{ lowStockProducts.size }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pedidos pendientes -->
+        <div class="col-md-3">
+            <div class="card text-white bg-info mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Pedidos Pendientes</h5>
+                    <p class="card-text display-4">{{ pendingOrders }}</p>
+                </div>
+            </div>
+        </div>
+        <!-- Ingresos totales -->
+        <div class="col-md-3">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Ingresos Totales</h5>
+                    <p class="card-text display-4">{{ totalRevenue | numberformat("#,##0.00") }}€</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Productos con bajo stock -->
+    {% if lowStockProducts is not empty %}
+    <div class="card mt-4">
+        <div class="card-header">
+            <h5>⚠️ Productos con Bajo Stock</h5>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Stock Actual</th>
+                        <th>Categoría</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in lowStockProducts %}
+                    <tr>
+                        <td>{{ product.nombre }}</td>
+                        <td><span class="badge bg-warning">{{ product.stock }}</span></td>
+                        <td>{{ product.categoria }}</td>
+                        <td>
+                            <a href="/admin/productos/{{ product.id }}/editar" class="btn btn-sm btn-primary">Editar</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+    <div class="mt-4">
+        <a href="/admin/productos" class="btn btn-primary me-2">Gestionar Productos</a>
+        <a href="/admin/pedidos" class="btn btn-secondary">Ver Pedidos</a>
+    </div>
+</div>
+{% endblock %}

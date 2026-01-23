@@ -35,58 +35,58 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for item in carrito.items %}
-                            <tr>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        {% if item.producto.imageUrl %}
-                                        <img src="{{ item.producto.imageUrl }}"
-                                             alt="{{ item.producto.nombre }}"
-                                             class="img-thumbnail me-3"
-                                             style="width: 60px; height: 60px; object-fit: cover;">
-                                        {% endif %}
-                                        <div>
-                                            <strong>{{ item.producto.nombre }}</strong>
-                                            <br>
-                                            <small class="text-muted">{{ item.producto.categoria }}</small>
-                                        </div>
+                        {% for item in carrito.items %}
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                {% if item.productos.imagen %}
+                                    <img src="{{ item.productos.imagen }}"
+                                         alt="{{ item.productos.nombre }}"
+                                         class="img-thumbnail me-3"
+                                         style="width: 60px; height: 60px; object-fit: cover;">
+                                    {% endif %}
+                                    <div>
+                                        <strong>{{ item.productos.nombre }}</strong>
+                                        <br>
+                                        <small class="text-muted">{{ item.productos.category }}</small>
                                     </div>
-                                </td>
-                                <td>{{ item.producto.precio }}€</td>
-                                <td>
-                                    <form action="/carrito/item/{{ item.producto.id }}" method="post" class="d-inline">
-                                        <input type="hidden" name="{{ _csrf.parameterName }}" value="{{ _csrf.token }}"/>
-                                        <input type="hidden" name="_method" value="put">
-                                        <div class="input-group" style="width: 120px;">
-                                            <button type="submit" name="quantity" value="{{ item.cantidad - 1 }}"
-                                                    class="btn btn-sm btn-outline-secondary"
-                                                    {% if item.cantidad <= 1 %}disabled{% endif %}>
-                                                <i class="bi bi-dash"></i>
-                                            </button>
-                                            <input type="number" class="form-control form-control-sm text-center"
-                                                   value="{{ item.cantidad }}" readonly>
-                                            <button type="submit" name="quantity" value="{{ item.cantidad + 1 }}"
-                                                    class="btn btn-sm btn-outline-secondary"
-                                                    {% if item.cantidad >= item.producto.stock %}disabled{% endif %}>
-                                                <i class="bi bi-plus"></i>
-                                            </button>
-                                        </div>
-                                    </form>
-                                </td>
-                                <td><strong>{{ item.subtotal }}€</strong></td>
-                                <td>
-                                    <form action="/carrito/item/{{ item.producto.id }}" method="post" class="d-inline">
-                                        <input type="hidden" name="{{ _csrf.parameterName }}" value="{{ _csrf.token }}"/>
-                                        <input type="hidden" name="_method" value="delete">
-                                        <button type="submit" class="btn btn-sm btn-danger"
-                                                onclick="return confirm('¿Eliminar este producto?');">
-                                            <i class="bi bi-trash"></i>
+                                </div>
+                            </td>
+                            <td>{{ item.productos.precio }}€</td>
+                            <td>
+                                <form action="/carrito/item/{{ item.productos.id }}" method="post" class="d-inline">
+                                    <input type="hidden" name="{{ _csrf.parameterName }}" value="{{ _csrf.token }}"/>
+                                    <input type="hidden" name="_method" value="put">
+                                    <div class="input-group" style="width: 120px;">
+                                        <button type="submit" name="quantity" value="{{ item.cantidad - 1 }}"
+                                                class="btn btn-sm btn-outline-secondary"
+                                                {% if item.cantidad <= 1 %}disabled{% endif %}>
+                                            <i class="bi bi-dash"></i>
                                         </button>
-                                    </form>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
+                                        <input type="number" class="form-control form-control-sm text-center"
+                                               value="{{ item.cantidad }}" readonly>
+                                        <button type="submit" name="quantity" value="{{ item.cantidad + 1 }}"
+                                                class="btn btn-sm btn-outline-secondary"
+                                {% if item.cantidad >= item.productos.stock %}disabled{% endif %}>
+                                            <i class="bi bi-plus"></i>
+                                        </button>
+                                    </div>
+                                </form>
+                            </td>
+                            <td><strong>{{ item.subtotal }}€</strong></td>
+                            <td>
+                                <form action="/carrito/item/{{ item.productos.id }}" method="post" class="d-inline">
+                                    <input type="hidden" name="{{ _csrf.parameterName }}" value="{{ _csrf.token }}"/>
+                                    <input type="hidden" name="_method" value="delete">
+                                    <button type="submit" class="btn btn-sm btn-danger"
+                                            onclick="return confirm('¿Eliminar este producto?');">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
                     </table>
                 </div>
             </div>
