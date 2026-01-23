@@ -386,29 +386,6 @@ MediaDaw/
 
 ## 📝 Próximos Pasos (Roadmap)
 
-### 🚧 En Desarrollo
-- [ ] **CartController** - Endpoints para gestión del carrito
-  - POST /carrito/add - Añadir producto
-  - GET /carrito - Ver carrito
-  - PUT /carrito/item/{id} - Actualizar cantidad
-  - DELETE /carrito/item/{id} - Eliminar línea
-  - POST /carrito/checkout - Finalizar compra
-  
-- [ ] **AuthController** - Sistema de autenticación
-  - GET /login - Formulario de login
-  - POST /login - Procesar login
-  - GET /registro - Formulario de registro
-  - POST /registro - Procesar registro
-  - GET /logout - Cerrar sesión
-
-- [ ] **Vistas del Carrito** (Pebble)
-  - carrito/view.peb - Vista del carrito
-  - carrito/checkout.peb - Proceso de compra
-
-- [ ] **Vistas de Autenticación** (Pebble)
-  - auth/login.peb - Formulario login
-  - auth/registro.peb - Formulario registro
-
 ### 🎯 Mejoras Futuras
 - [ ] Sistema de favoritos
 - [ ] Notificaciones por email (confirmación de pedidos)
@@ -417,7 +394,7 @@ MediaDaw/
 - [ ] Sistema de reseñas de productos
 - [ ] Panel de estadísticas avanzado para admin
 - [ ] Integración con pasarela de pago (Stripe)
-- [ ] Historial de precios de productos
+- [ ] Historial de precios de productos en el panel de admin
 
 ---
 
