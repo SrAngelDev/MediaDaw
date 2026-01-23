@@ -4,7 +4,7 @@
 
             {# Logo #}
             <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-decoration-none me-3">
-                <img src="/images/logo.png" alt="MediaDaw Logo" class="logo-img">
+                <img src="/images/logo-blanco.png" alt="MediaDaw Logo" class="logo-img">
             </a>
 
             {# Buscador #}

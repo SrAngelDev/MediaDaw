@@ -2,6 +2,7 @@ plugins {
     java
     id("org.springframework.boot") version "3.5.6"
     id("io.spring.dependency-management") version "1.1.7"
+    jacoco
 }
 
 group = "srangeldev"
@@ -54,4 +55,30 @@ dependencies {
 }
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+tasks.test {
+    useJUnitPlatform()
+    finalizedBy(tasks.jacocoTestReport) // Genera el reporte automáticamente después de los tests
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test) // Los tests deben ejecutarse antes del reporte
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+        csv.required.set(false)
+    }
+
+    classDirectories.setFrom(
+        files(classDirectories.files.map {
+            fileTree(it) {
+                exclude(
+                    "**/models/**",
+                    "**/controllers/**",
+                    "**/config/**",
+                )
+            }
+        })
+    )
 }
